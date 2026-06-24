@@ -1326,7 +1326,7 @@ def _style_status_df(df):
         return ""
     cols_exist = [c for c in ["Status"] if c in df.columns]
     if cols_exist:
-        return df.style.applymap(_sty, subset=cols_exist)
+        return df.style.map(_sty, subset=cols_exist)
     return df.style
 
 
