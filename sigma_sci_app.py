@@ -363,68 +363,110 @@ def _tokens(name: str) -> set[str]:
 # 
 
 DE_PARA_BASE: dict[str, str] = {
-    #  Caixas e Bancos 
-    "1.1.1.1.1.01": "494018",   "1.1.1.1.2.1":  "494021",
-    "1.1.1.1.2.5":  "494022",   "1.1.1.2.09.1":  "47597",
-    "1.1.1.2.09.3":  "4588",    "1.1.1.2.09.24": "493924",
-    "1.1.1.2.09.26": "4588",    "3.01.1.1":      "159",
-    "1.1.2.2.99":    "12",
-    #  Aplicações / Investimentos (01.1.1.03 = FAF · 01.1.1.06 = Diversas) 
-    # Análise hierárquica: conta-título (grupo) + conta analítica
-    # 1.1.1.3.x → grupo "Aplicações de Liquidez Imediata"
-    # 1.1.1.4.x → grupo "Aplicações Financeiras Diversas / Renda Fixa"
-    "1.1.1.3.1":  "116",    # BB (01.1.1.03.001 Banco do Brasil – FAF)
-    "1.1.1.3.2":  "124",    # CEF (01.1.1.03.002 Caixa Econ. Fed. – FAF)
-    "1.1.1.3.3":  "47767",  # Itaú (01.1.1.03.003 Itau – FAF)
-    "1.1.1.3.4":  "48593",  # Bradesco (01.1.1.03.006 Bradesco – FAF)
-    "1.1.1.3.5":  "49085",  # Sicredi (01.1.1.03.008 Sicredi – FAF automática)
-    "1.1.1.3.6":  "127",    # Poupança Sicredi (01.1.1.03.009)
-    "1.1.1.3.7":  "493960", # Sicredi Capital (01.1.1.03.013)
-    "1.1.1.3.8":  "493980", # Sicredi Exclusivo (01.1.1.03.014)
-    # Grupo 1.1.1.4.x → Aplicações Financeiras de maior prazo
-    "1.1.1.4.1":  "128",    # BB Renda Fixa Automática (01.1.1.06.009)
-    "1.1.1.4.2":  "48470",  # BB Renda Fixa (01.1.1.06.002)
-    "1.1.1.4.3":  "150",    # Aplicação Renda Fixa LP CEF (01.1.1.06.008)
-    "1.1.1.4.4":  "126",    # Itaú CDB-DI (01.1.1.07.003)
-    "1.1.1.4.5":  "49085",  # Aplicação Automática Sicredi → Sicredi FAF (01.1.1.03.008)
-    "1.1.1.4.6":  "124",    # Investimento CEF → CEF FAF (01.1.1.03.002)
-    "1.1.1.4.7":  "494098", # Investimento Sicredi → Sicredi RDC (01.1.1.06.015)
-    # Cartões Débito (01.1.2.21.xxx)
+    # ── Caixas ─────────────────────────────────────────────────────────
+    "1.1.1.1.1.01": "494018",   # Caixa PDV
+    "1.1.1.1.2.1":  "494020",   # Caixa Adm
+    "1.1.1.1.2.2":  "494021",   # Sangrias a Baixar
+    "1.1.1.1.2.5":  "494022",   # Cofre
+    "1.1.1.1.2.6":  "494023",   # Caixa de Troco
+    # ── Bancos ──────────────────────────────────────────────────────────
+    "1.1.1.2.09.1":  "47597",   # Sicredi
+    "1.1.1.2.09.2":  "86",      # CEF
+    "1.1.1.2.09.3":  "4588",    # Itaú
+    "1.1.1.2.09.11": "94",      # Bradesco
+    "1.1.1.2.09.24": "493924",  # Uniprime
+    "1.1.1.2.09.26": "4588",    # Itaú Transição (mesma conta SCI)
+    # ── Cheques / Boletos / Aplicações ──────────────────────────────────
+    "1.1.1.2.13.3": "494024",   # Cheques Devolvidos nos Bancos
+    "1.1.1.3.3":    "494026",   # Boletos a compensar
+    "1.1.1.3.5":    "494027",   # Capital integralizado Sicredi
+    "1.1.1.4.5":    "49085",    # Aplicação Automática Sicredi
+    "1.1.1.4.7":    "494098",   # Investimento Sicredi RDC
+    # ── Cartões Débito ──────────────────────────────────────────────────
     "1.1.2.01.01.01":"494033",  "1.1.2.01.01.02":"494034",
     "1.1.2.01.01.03":"494035",  "1.1.2.01.01.04":"494036",
-    # Cartões Crédito (01.1.2.03.xxx) + Outros (01.1.2.04.xxx)
+    # ── Cartões Crédito ─────────────────────────────────────────────────
     "1.1.2.01.02.01":"494028",  "1.1.2.01.02.04":"100017",
-    "1.1.2.01.02.05":"494029",  "1.1.2.01.02.06":"494127",
-    "1.1.2.01.02.07":"494128",  "1.1.2.01.02.09":"494030",
+    "1.1.2.01.02.05":"494029",  "1.1.2.01.02.09":"494030",
     "1.1.2.01.02.18":"494031",
+    # ── Frotas / Convênios ───────────────────────────────────────────────
     "1.1.2.01.03.09":"494037",  "1.1.2.01.03.12":"494038",
     "1.1.2.01.03.19":"494039",  "1.1.2.01.03.29":"494040",
     "1.1.2.01.03.30":"494041",  "1.1.2.01.03.31":"494042",
-    "1.1.2.01.03.32":"494043",  "1.1.2.01.03.34":"494044",
-    "1.1.2.01.03.35":"494045",  "1.1.2.01.03.36":"494046",
-    "1.1.2.01.03.37":"494047",  "1.1.2.01.03.38":"494048",
-    "1.1.2.01.06":   "494049",  "1.1.2.2.37.1":  "494053",
-    "1.1.2.2.37.6":  "494054",  "1.1.2.2.41":    "494055",
-    "1.1.2.2.51":    "494056",  "1.1.2.2.68":    "494058",
-    "1.1.2.6.1":     "494064",  "2.1.6.30":      "494060",
-    # Carta Frete
-    "1.1.2.2.4":  "493909",     "2.1.4.11":  "660",
-    # Funcionários / Sócios
-    "1.1.2.2.1":  "494050",     "1.1.2.2.2": "494051",
-    "1.1.2.3.1":  "494063",
-    # Passivo
-    "2.1.6.03":   "493902",     "3.06.1.1.1":"1287",
-    "3.06.4.12":  "494096",
-    # Despesas
-    "3.06.1.6.04":"3417",       "3.07.1.3.3": "494100",
-    # Bônus passivo
-    "2.1.6.15":   "",
-    # Excluir
-    "1.1.5.2":    "EXCLUIR",    "4.1": "EXCLUIR",   "4.2": "EXCLUIR",
+    "1.1.2.01.03.32":"494043",  # TICKET LOG (código SCI específico)
+    "1.1.2.01.03.34":"494044",  "1.1.2.01.03.35":"494045",
+    "1.1.2.01.03.36":"494046",  "1.1.2.01.03.37":"494047",
+    "1.1.2.01.03.38":"494048",
+    "1.1.2.01.06":  "494123",   # (-) Crédito Celular → Supera
+    # ── Clientes ────────────────────────────────────────────────────────
+    "1.1.2.2.1":  "494057",     # Faturas a receber c/ boleto
+    "1.1.2.2.2":  "494057",     # Notas a cobrar
+    "1.1.2.2.4":  "493909",     # Carta Frete a Receber
+    "1.1.2.2.32": "494053",     # Promissória a receber
+    "1.1.2.2.37": "494053",     # Cheques a Receber
+    "1.1.2.2.37.1":"494053",    # Cheques Pré-datados
+    "1.1.2.2.37.6":"494054",    # Cheques à vista
+    "1.1.2.2.41": "494057",     # Fretes Faturados
+    "1.1.2.2.51": "494057",     # Associação Postos O.Frete
+    "1.1.2.2.52": "494057",     # Fatura a Receber com Boleto
+    "1.1.2.2.68": "494058",     # Cheques Não Recebidos
+    "1.1.2.2.69": "494059",     # Cheques Devolvidos Antigos
+    "1.1.2.2.98": "494060",     # Inadimplentes Posto
+    "1.1.2.2.99": "494061",     # Inadimplentes c/ Virtus
+    # ── Funcionários / Terceiros ─────────────────────────────────────────
+    "1.1.2.3.1":  "494063",     # Vale Funcionário
+    "1.1.2.6.1":  "494064",     # Adiantamento Rodotank
+    # ── Estoque / Imobilizado ────────────────────────────────────────────
+    "1.1.5.2":    "434",        # Mercadorias para Revenda
+    "1.1.5.11":   "299",        # Adiantamento a fornecedores
+    "1.2.3.1.17": "494065",     # Benfeitorias em Imóveis
+    "1.2.8.3":    "494131",     # (-) Posto Montanha
+    # ── Empréstimos ─────────────────────────────────────────────────────
+    "2.1.4.12":   "494066",     # Empréstimo Sicredi — Murungava Fev/25
+    "2.1.4.13":   "494067",     # Empréstimo Itaú — Murungava Ago/25
+    "2.1.4.21":   "494068",     # Loja Murungava
+    # ── Passivo — Obrigações ────────────────────────────────────────────
+    "2.1.6.01":   "493902",     # Adiantamentos de clientes → Fornecedores Diversos
+    "2.1.6.03":   "493902",     # Contas a pagar → Fornecedores Diversos
+    "2.1.6.15":   "494073",     # Bonificações a clientes a pagar
+    "2.1.6.19":   "494074",     # Ordem de depósito troco
+    "2.1.6.27":   "494023",     # Cheques troco PDV
+    "2.1.6.28":   "494023",     # Cheques a pagar Adm
+    "2.1.6.29":   "494077",     # Aquisição Sobrados
+    "2.1.6.30":   "494073",     # Depósito de Cartão
+    "2.1.6.31":   "494073",     # Depósitos Clientes
+    "2.1.6.32":   "494073",     # Depósitos não identificados
+    "2.2.12.2":   "494057",     # (-) Transf. entre unidades a Receber
+    "2.2.13.1":   "493902",     # Transf. entre unidades a Pagar
+    "2.2.13.2":   "493902",     # MARELUZ R PEREIRA
+    # ── Receita (conta transitória obrigatória) ──────────────────────────
+    "3.01.1.1":   "159",        # Vendas PDV → Clientes Diversos
+    # ── Faltas e Sobras ─────────────────────────────────────────────────
+    "3.06.3.7.1": "494114",     # Sobras em caixas
+    "3.06.3.7.2": "494113",     # Faltas em caixas
+    "3.06.3.7.4": "494113",     # Falta de produtos
+    # ── Despesas financeiras ─────────────────────────────────────────────
+    "3.07.1.1.3": "5541",       # Tarifas bancárias
+    "3.07.1.1.6": "48836",      # Taxas admin de cartões
+    "3.07.1.1.8": "48836",      # Taxas antecipação de cartões
+    "3.07.1.1.12":"48836",      # Aluguel Máquinas de Cartão
+    "3.07.1.1.13":"5541",       # Tarifas Cesta Serviços Bancários
+    "3.07.1.1.14":"5541",       # Tarifas com Cobrança/Boleto
+    "3.07.1.3.3": "494100",     # Despesa com Bônus Comercial
+    # ── Despesas operacionais ────────────────────────────────────────────
+    "3.06.1.1.17":"494119",     # Despesas Refeição Funcionário
+    "3.06.1.6.26":"494119",     # Utensílios de Cozinha
+    "3.06.2.5.25":"494119",     # Cozinha
+    "3.06.2.5.32":"494094",     # RodoTank → Fretes
+    "3.06.4.9":   "494094",     # Fretes Combustível
+    # ── Excluir (contas de controle puro) ────────────────────────────────
+    "4.1": "EXCLUIR",   "4.2": "EXCLUIR",
+    "4.4": "EXCLUIR",   "4.5": "EXCLUIR",
+    "4.6": "EXCLUIR",   "4.7": "EXCLUIR",
 }
 
-EXCLUIR_PREFIXOS = ("4.1","4.2")
-EXCLUIR_EXATOS   = {"1.1.5.2","EXCLUIR"}
+EXCLUIR_PREFIXOS = ("4.1","4.2","4.4","4.5","4.6","4.7")
+EXCLUIR_EXATOS   = {"EXCLUIR"}
 ITAU_CODES       = {"1.1.1.2.09.3","1.1.1.2.09.26"}
 BANK_SCI_MAP     = {"1.1.1.2.09.1":"47597","1.1.1.2.09.24":"493924","1.1.1.1.2.5":"494022"}
 
@@ -901,12 +943,15 @@ def build_depara_with_matches(accounts, sci_plan, persistent, extra) -> list[dic
         cls_sigma = detect_class_sigma(nc)
 
         sci_code, source = "", ""
-        if excluir:
-            sci_code, source = "EXCLUIR","base"
-        elif nc in extra:
+        # persistent e extra têm prioridade máxima — inclusive sobre excluir
+        if nc in extra and extra[nc]:
             sci_code, source = extra[nc],"sessão"
-        elif nc in persistent:
+            excluir = False
+        elif nc in persistent and persistent[nc]:
             sci_code, source = persistent[nc],"salvo"
+            excluir = persistent[nc] == "EXCLUIR"
+        elif excluir:
+            sci_code, source = "EXCLUIR","base"
         elif nc in DE_PARA_BASE and DE_PARA_BASE[nc]:
             sci_code, source = DE_PARA_BASE[nc],"base"
         else:
@@ -1906,91 +1951,80 @@ def main():
                     "Valor":l["valor"],"Desc":(l.get("desc") or "")[:38],
                 } for l in lancamentos[:100]]),use_container_width=True,hide_index=True)
 
-    # TAB 4 — EXPORTAR
+    # TAB 4 - EXPORTAR
     with tab4:
         if "lancamentos" not in st.session_state:
             st.info("Execute o processamento na aba 3 primeiro."); st.stop()
         lancamentos = st.session_state.lancamentos
         per         = st.session_state.get("periodo", periodo)
-        emp         = st.session_state.get("empresa_nome", empresa_nome)
-        stats       = st.session_state.get("stats_dedup",{})
-        sci_plan    = st.session_state.get("sci_plan",{})
 
-        st.markdown("### Exportar Arquivos")
-        fc1,fc2=st.columns(2)
-        with fc1:
-            incl_pend=st.checkbox("Incluir lancamentos com pendencia D/C",value=True)
-            nome_txt=st.text_input("Nome TXT",value=f"SCI_Importacao_Empresa29_{per}.txt")
-        with fc2:
-            gerar_excel=st.checkbox("Gerar planilha Excel auditavel",value=True)
-            nome_xlsx=st.text_input("Nome Excel",value=f"Auditoria_Lancamentos_{per}.xlsx")
+        st.markdown(f'<h2 class="section-h">Exportar TXT para o SCI</h2>', unsafe_allow_html=True)
 
-        if incl_pend: lancs_export=lancamentos
-        else: lancs_export=[l for l in lancamentos if l.get("sci_d") and l.get("sci_c")]
+        col_exp1, col_exp2 = st.columns([2,1])
+        with col_exp1:
+            st.markdown(f"""
+<div class="info-card">
+<strong>Periodo:</strong> {per} &nbsp;|&nbsp;
+<strong>Lancamentos:</strong> {len(lancamentos)} &nbsp;|&nbsp;
+<strong>Formato:</strong> Windows-1252 (ANSI)
+</div>""", unsafe_allow_html=True)
 
-        completos_exp=[l for l in lancs_export if l.get("sci_d") and l.get("sci_c")]
-        pend_exp     =[l for l in lancs_export if not l.get("sci_d") or not l.get("sci_c")]
-        total_val    =sum(l.get("valor",0) or 0 for l in completos_exp)
+        total_d = sum(l["valor"] for l in lancamentos if l.get("sci_d") and l.get("sci_c"))
+        total_c = sum(l["valor"] for l in lancamentos if l.get("sci_d") and l.get("sci_c"))
+        pend    = sum(1 for l in lancamentos if not l.get("sci_d") or not l.get("sci_c"))
 
-        em1,em2,em3,em4=st.columns(4)
-        metric_card("Linhas TXT",   f"{len(lancs_export):,}", em1)
-        metric_card("Completos",    f"{len(completos_exp):,}",em2,gold=True)
-        metric_card("Pendencias",   f"{len(pend_exp):,}",     em3)
-        metric_card("Volume total", f"R$ {total_val:,.0f}",   em4,gold=True)
+        if pend:
+            st.markdown(
+                f'<div class="warn-box">Atencao: <strong>{pend}</strong> lancamentos com debito ou credito em branco (pendentes). '
+                f'Revise antes de importar no SCI.</div>',
+                unsafe_allow_html=True)
 
-        st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
-        txt_bytes=gerar_txt(lancs_export, per)
+        if total_d == total_c:
+            st.markdown(
+                f'<div class="ok-box">Balanceado: Total debitos = Total creditos = R$ {total_d:,.2f}</div>',
+                unsafe_allow_html=True)
 
-        with st.expander("Preview TXT — primeiras 30 linhas"):
-            st.code("\n".join(txt_bytes.decode("cp1252",errors="replace").splitlines()[:30]),
-                    language=None)
+        # Gerar TXT
+        txt_lines = []
+        seq = 1
+        for l in lancamentos:
+            d   = l.get("sci_d","")
+            c   = l.get("sci_c","")
+            val = f"{l['valor']:.2f}"
+            dt  = l["data"].replace("-","")
+            desc = clean_comp(l.get("desc",""), 40)
+            seq_str = str(seq).zfill(6)
+            txt_lines.append(f"{seq_str},{dt},{d},{c},{val},,,{desc},,,D")
+            seq += 1
 
-        dl1,dl2,dl3=st.columns(3)
-        with dl1:
-            st.download_button("Baixar TXT para SCI", data=txt_bytes,
-                               file_name=nome_txt, mime="text/plain",
-                               type="primary", use_container_width=True)
-        with dl2:
-            if gerar_excel:
-                with st.spinner("Gerando Excel..."):
-                    xlsx_bytes=gerar_planilha_auditoria(lancs_export,sci_plan,per)
-                st.download_button("Baixar Excel Auditavel", data=xlsx_bytes,
-                                   file_name=nome_xlsx,
-                                   mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                   use_container_width=True)
-        with dl3:
-            tipos=Counter(l.get("tipo","?") for l in lancs_export)
-            rel="\n".join([
-                "DOMANN CONTABILIDADE","Sistema de Integracao Sigma-SCI","="*50,
-                f"Empresa  : {emp}",f"Periodo  : {per}",
-                f"Gerado   : {datetime.now().strftime('%d/%m/%Y %H:%M')}","="*50,
-                f"Movs. brutos       : {stats.get('total_bruto',0):>8,}",
-                f"Pares deduplicados : {stats.get('pares',0):>8,}",
-                f"Sem par (alertas)  : {stats.get('sem_par',0):>8,}",
-                f"Exportados         : {len(lancs_export):>8,}",
-                f"  Completos (D+C)  : {len(completos_exp):>8,}",
-                f"  Pendencias       : {len(pend_exp):>8,}",
-                f"Volume total       : R$ {total_val:>14,.2f}","="*50,
-                "Tipos de lancamento:"] +
-                [f"  {k:<22}: {v:>5}" for k,v in sorted(tipos.items())])
-            st.download_button("Relatorio de Processamento",
-                               data=rel.encode("utf-8"),
-                               file_name=f"relatorio_{per.replace('/','_')}.txt",
-                               mime="text/plain", use_container_width=True)
+        txt_content = "\n".join(txt_lines)
 
+        with col_exp2:
+            st.download_button(
+                label="Baixar TXT para o SCI",
+                data=txt_content.encode("windows-1252", errors="replace"),
+                file_name=f"importacao_sci_{per.replace('/','_')}.txt",
+                mime="text/plain",
+                use_container_width=True,
+            )
 
-# ════════════════════════════════════════════════════════════════
-#  FOOTER
-# ════════════════════════════════════════════════════════════════
+        with st.expander("Visualizar TXT gerado"):
+            st.code(txt_content[:3000] + ("\n..." if len(txt_content) > 3000 else ""), language="text")
 
-    st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
-    st.markdown(
-        '<div style="text-align:center;font-size:.72rem;color:#7a7078;padding:.5rem 0">'
-        'Sigma SCI Integrador &nbsp;|&nbsp; <strong>v3.6</strong> &nbsp;|&nbsp; '
-        'Domann Contabilidade &nbsp;&mdash;&nbsp; Diego Domann CRC PR-070307/O-9'
-        '</div>',
-        unsafe_allow_html=True)
+        # Exportar DE/PARA confirmado
+        st.markdown("---")
+        st.markdown('<h3 class="section-h" style="font-size:1rem">Salvar DE/PARA confirmado</h3>',
+                    unsafe_allow_html=True)
+        col_j1, col_j2 = st.columns([2,1])
+        with col_j1:
+            st.caption("Baixe e salve este arquivo junto com o app para preservar seus mapeamentos.")
+        with col_j2:
+            pers_export = load_persistent()
+            st.download_button(
+                label="Baixar de_para_confirmado.json",
+                data=json.dumps(pers_export, ensure_ascii=False, indent=2).encode("utf-8"),
+                file_name="de_para_confirmado.json",
+                mime="application/json",
+                use_container_width=True,
+            )
 
-
-if __name__ == "__main__":
-    main()
