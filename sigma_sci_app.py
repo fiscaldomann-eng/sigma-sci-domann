@@ -1,10 +1,10 @@
 """
-╔══════════════════════════════════════════════════════════════════════════╗
-║   INTEGRAÇÃO SIGMA → SCI  v3.2  — Domann Contabilidade                 ║
-║   Auto Posto Murungava Ltda | Empresa SCI nº 29                         ║
-╠══════════════════════════════════════════════════════════════════════════╣
-║   v3.2: Logo Domann · Correção nomes · Alterar sugestões · Atalho      ║
-╚══════════════════════════════════════════════════════════════════════════╝
+
+   INTEGRAÇÃO SIGMA → SCI  v3.3  — Domann Contabilidade                 
+   Auto Posto Murungava Ltda | Empresa SCI nº 29                         
+
+   v3.3: Paleta real · Logo fiel · Sem emojis · Design moderno          
+
 """
 
 import re, io, csv, json, os, unicodedata, difflib
@@ -13,126 +13,146 @@ from collections import defaultdict, Counter
 
 import streamlit as st
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # LOGO DOMANN — SVG inline (aproximação fiel da identidade visual)
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 DOMANN_LOGO_SVG = (
-    '<svg viewBox="0 0 280 72" xmlns="http://www.w3.org/2000/svg" width="280" height="72">'
-    '<rect x="1" y="1" width="69" height="69" rx="5" fill="none" stroke="#C9A227" stroke-width="2.8"/>'
-    '<rect x="7" y="7" width="57" height="57" rx="3" fill="none" stroke="#C9A227" stroke-width="1.2"/>'
-    '<line x1="35.5" y1="9" x2="35.5" y2="63" stroke="#C9A227" stroke-width="1.1"/>'
-    '<line x1="9" y1="36" x2="63" y2="36" stroke="#C9A227" stroke-width="1.1"/>'
-    '<text x="22" y="30" font-family="Georgia,serif" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">D</text>'
-    '<text x="49.5" y="30" font-family="Georgia,serif" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">O</text>'
-    '<text x="22" y="57" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">M</text>'
-    '<text x="49.5" y="57" font-family="Georgia,serif" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">N</text>'
-    '<text x="86" y="43" font-family="Georgia,serif" font-size="31" font-weight="bold" fill="#FFFFFF" letter-spacing="1">DOMANN</text>'
-    '<text x="88" y="60" font-family="Arial,sans-serif" font-size="8.5" fill="#C9A227" letter-spacing="4">CONTABILIDADE</text>'
+    '<svg viewBox="0 0 300 76" xmlns="http://www.w3.org/2000/svg" width="300" height="76">'
+    # Escudo (shield) — fundo escuro
+    '<path d="M4 4 L4 48 Q4 68 34 74 Q64 68 64 48 L64 4 Z" fill="#333232"/>'
+    # Borda ouro do escudo
+    '<path d="M4 4 L4 48 Q4 68 34 74 Q64 68 64 48 L64 4 Z" fill="none" stroke="#AC996F" stroke-width="2"/>'
+    # Linha vertical central
+    '<line x1="34" y1="4" x2="34" y2="68" stroke="#AC996F" stroke-width="1.2" stroke-opacity="0.7"/>'
+    # Linha horizontal central
+    '<line x1="4" y1="36" x2="64" y2="36" stroke="#AC996F" stroke-width="1.2" stroke-opacity="0.7"/>'
+    # Letras D O M N
+    '<text x="19" y="27" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">D</text>'
+    '<text x="49" y="27" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">O</text>'
+    '<text x="19" y="60" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">M</text>'
+    '<text x="49" y="60" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">N</text>'
+    # Nome e subtítulo
+    '<text x="78" y="36" font-family="Georgia,Times New Roman,serif" font-size="26" font-weight="bold" fill="#FFFFFF" letter-spacing="1">DOMANN</text>'
+    '<text x="80" y="54" font-family="Arial,Helvetica,sans-serif" font-size="9" fill="#AC996F" letter-spacing="3.5">CONTABILIDADE</text>'
     '</svg>'
 )
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # CONFIGURAÇÃO DA PÁGINA
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 st.set_page_config(
-    page_title="Sigma → SCI | Domann Contabilidade",
-    page_icon="📊",
+    page_title="Sigma SCI | Domann Contabilidade",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
-# Paleta Domann: Charcoal escuro + Ouro
-_DOMANN_DARK  = "#1A1A2E"   # quase preto azulado
-_DOMANN_NAVY  = "#16213E"
-_DOMANN_GOLD  = "#C9A227"
-_DOMANN_GOLD2 = "#B8960C"
-_DOMANN_TEXT  = "#F0F0F0"
+# Paleta Domann: Paleta real da identidade visual
+_DOMANN_DARK  = "#333232"  # Carvão escuro — primário
+_DOMANN_NAVY  = "#2A2929"  # Variante mais escura
+_DOMANN_GOLD  = "#AC996F"  # Ouro claro — realce
+_DOMANN_GOLD2 = "#8B7B4C"  # Ouro escuro — textos
+_DOMANN_TEXT  = "#F0EEE8"  # Off-white quente
 
 st.markdown(f"""
 <style>
-/* ── Reset ──────────────────────────────────────────────── */
+/*  Reset e Base  */
 .block-container {{ padding:1.2rem 2rem 2rem; max-width:1440px; }}
-h1,h2,h3 {{ color:{_DOMANN_DARK} !important; }}
+h1,h2,h3 {{ color:{_DOMANN_DARK} !important; font-family:'Segoe UI',system-ui,sans-serif; }}
+body {{ font-family:'Segoe UI',system-ui,sans-serif; }}
 
-/* ── Hero Domann ────────────────────────────────────────── */
+/*  Hero Domann  */
 .hero {{
-  background: linear-gradient(135deg,{_DOMANN_DARK} 0%,{_DOMANN_NAVY} 70%,#0F3460 100%);
-  border-radius:14px; padding:1.4rem 2rem; margin-bottom:1.4rem;
-  display:flex; align-items:center; gap:1.6rem;
-  border:1px solid {_DOMANN_GOLD}33;
-  box-shadow: 0 4px 24px rgba(0,0,0,.35);
+  background: linear-gradient(135deg,{_DOMANN_DARK} 0%,{_DOMANN_NAVY} 100%);
+  border-radius:12px; padding:1.4rem 2rem; margin-bottom:1.6rem;
+  display:flex; align-items:center; gap:1.8rem;
+  border-bottom:3px solid {_DOMANN_GOLD};
+  box-shadow: 0 2px 16px rgba(0,0,0,.25);
 }}
 .hero-sub {{
-  color:rgba(255,255,255,.65); font-size:.82rem; margin:.25rem 0 0;
-  letter-spacing:.5px;
+  color:rgba(255,255,255,.6); font-size:.80rem; margin:.2rem 0 0;
+  letter-spacing:.4px; font-family:'Segoe UI',system-ui,sans-serif;
 }}
 .hero-tag {{
   display:inline-block; background:{_DOMANN_GOLD}22;
-  border:1px solid {_DOMANN_GOLD}55; border-radius:20px;
-  padding:2px 10px; font-size:.75rem; color:{_DOMANN_GOLD}; margin-top:.4rem;
+  border:1px solid {_DOMANN_GOLD}66; border-radius:4px;
+  padding:2px 10px; font-size:.72rem; color:{_DOMANN_GOLD}; margin-top:.5rem;
+  letter-spacing:.5px; text-transform:uppercase; font-weight:600;
 }}
 
-/* ── Tabs ───────────────────────────────────────────────── */
+/*  Tabs  */
 .stTabs [data-baseweb="tab-list"] {{
-  background:#F1F5F9; padding:4px; border-radius:10px; gap:2px;
+  background:#F4F4F2; padding:3px; border-radius:8px; gap:2px;
+  border:1px solid #E0DDD8;
 }}
 .stTabs [data-baseweb="tab"] {{
-  border-radius:8px; padding:.5rem 1.1rem; font-weight:600;
-  font-size:.88rem; color:#475569; border:none !important;
+  border-radius:6px; padding:.45rem 1.1rem; font-weight:600;
+  font-size:.86rem; color:#5A5650; border:none !important;
 }}
 .stTabs [aria-selected="true"] {{
   background:{_DOMANN_DARK} !important; color:#fff !important;
 }}
 
-/* ── Metric cards ───────────────────────────────────────── */
+/*  Metric cards  */
 .metric-card {{
-  background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px;
+  background:#FAFAF9; border:1px solid #E5E2DC; border-radius:8px;
   padding:1rem 1.2rem; text-align:center;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
 }}
 .metric-value {{ font-size:1.9rem; font-weight:700; color:{_DOMANN_DARK}; }}
-.metric-label {{ font-size:.78rem; color:#64748B; margin-top:2px; }}
+.metric-label {{ font-size:.76rem; color:#6B6560; margin-top:2px; text-transform:uppercase; letter-spacing:.4px; }}
 .metric-card-gold {{
-  background:{_DOMANN_GOLD}11; border:1px solid {_DOMANN_GOLD}55;
-  border-radius:10px; padding:1rem 1.2rem; text-align:center;
+  background:{_DOMANN_GOLD}0F; border:1px solid {_DOMANN_GOLD}55;
+  border-radius:8px; padding:1rem 1.2rem; text-align:center;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
 }}
 .metric-value-gold {{ font-size:1.9rem; font-weight:700; color:{_DOMANN_GOLD2}; }}
 
-/* ── Info boxes ─────────────────────────────────────────── */
-.info-box {{ background:#EFF6FF; border-left:4px solid #3B82F6;
-            padding:.8rem 1rem; border-radius:6px; font-size:.88rem; margin:.6rem 0; }}
-.warn-box {{ background:#FFFBEB; border-left:4px solid #F59E0B;
-            padding:.8rem 1rem; border-radius:6px; font-size:.88rem; margin:.6rem 0; }}
-.ok-box   {{ background:#F0FDF4; border-left:4px solid #22C55E;
-            padding:.8rem 1rem; border-radius:6px; font-size:.88rem; margin:.6rem 0; }}
-.gold-box {{ background:{_DOMANN_GOLD}11; border-left:4px solid {_DOMANN_GOLD};
-            padding:.8rem 1rem; border-radius:6px; font-size:.88rem; margin:.6rem 0; }}
-.pend-card {{ background:#FFF; border:1px solid #FCD34D; border-radius:10px;
-              padding:1rem; margin:.5rem 0; }}
-.alt-card  {{ background:#F8FAFC; border:1px solid {_DOMANN_GOLD}44;
-              border-radius:10px; padding:1rem; margin:.5rem 0; }}
+/*  Info boxes  */
+.info-box {{ background:#EFF6FF; border-left:3px solid #3B82F6;
+            padding:.75rem 1rem; border-radius:0 6px 6px 0; font-size:.86rem; margin:.5rem 0; }}
+.warn-box {{ background:#FFFBEB; border-left:3px solid #F59E0B;
+            padding:.75rem 1rem; border-radius:0 6px 6px 0; font-size:.86rem; margin:.5rem 0; }}
+.ok-box   {{ background:#F0FDF4; border-left:3px solid #22C55E;
+            padding:.75rem 1rem; border-radius:0 6px 6px 0; font-size:.86rem; margin:.5rem 0; }}
+.gold-box {{ background:{_DOMANN_GOLD}0D; border-left:3px solid {_DOMANN_GOLD};
+            padding:.75rem 1rem; border-radius:0 6px 6px 0; font-size:.86rem; margin:.5rem 0; }}
+.pend-card {{ background:#FFFEF7; border:1px solid #E8D87A; border-radius:8px;
+              padding:.9rem 1rem; margin:.4rem 0; }}
+.alt-card  {{ background:#FAFAF8; border:1px solid {_DOMANN_GOLD}44;
+              border-radius:8px; padding:.9rem 1rem; margin:.4rem 0; }}
 
-/* ── Botões ─────────────────────────────────────────────── */
+/*  Botões  */
 .stButton>button[kind="primary"] {{
-  background:linear-gradient(135deg,{_DOMANN_DARK},{_DOMANN_NAVY});
-  color:#fff; border:1px solid {_DOMANN_GOLD}55; border-radius:8px;
-  font-weight:600; padding:.55rem 1.4rem;
+  background:{_DOMANN_DARK};
+  color:#fff; border:1px solid {_DOMANN_GOLD}44; border-radius:6px;
+  font-weight:600; padding:.5rem 1.4rem;
+  transition:all .15s ease;
 }}
-.stButton>button[kind="primary"]:hover {{ opacity:.9; }}
+.stButton>button[kind="primary"]:hover {{
+  background:{_DOMANN_NAVY}; border-color:{_DOMANN_GOLD};
+}}
 
-/* ── Divisor dourado ────────────────────────────────────── */
+/*  Divisor dourado  */
 .gold-divider {{
-  height:2px;
-  background:linear-gradient(90deg,transparent,{_DOMANN_GOLD}88,transparent);
-  margin:1.2rem 0; border:none;
+  height:1px;
+  background:linear-gradient(90deg,transparent,{_DOMANN_GOLD}66,transparent);
+  margin:1.4rem 0; border:none;
+}}
+
+/*  Tabela  */
+.dataframe thead th {{
+  background:{_DOMANN_DARK} !important; color:#fff !important;
+  font-size:.82rem; font-weight:600;
 }}
 </style>
 """, unsafe_allow_html=True)
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # PERSISTÊNCIA JSON
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 _PERSIST_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              "de_para_confirmado.json")
@@ -167,9 +187,9 @@ def save_persistent(mapping: dict) -> None:
         pass
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # NORMALIZAÇÃO (definida cedo — usada por detect_class_sci e smart_match)
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def _norm(name: str) -> str:
     nfd = unicodedata.normalize("NFD", name)
@@ -191,18 +211,18 @@ def _tokens(name: str) -> set[str]:
             if t not in _STOPWORDS and len(t) >= 3}
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # DE/PARA BASE — SIGMA → SCI (Murungava, Empresa 29)
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 DE_PARA_BASE: dict[str, str] = {
-    # ── Caixas e Bancos ──────────────────────────────────────────────────────
+    #  Caixas e Bancos 
     "1.1.1.1.1.01": "494018",   "1.1.1.1.2.1":  "494021",
     "1.1.1.1.2.5":  "494022",   "1.1.1.2.09.1":  "47597",
     "1.1.1.2.09.3":  "4588",    "1.1.1.2.09.24": "493924",
     "1.1.1.2.09.26": "4588",    "3.01.1.1":      "159",
     "1.1.2.2.99":    "12",
-    # ── Aplicações / Investimentos (01.1.1.03 = FAF · 01.1.1.06 = Diversas) ──
+    #  Aplicações / Investimentos (01.1.1.03 = FAF · 01.1.1.06 = Diversas) 
     # Análise hierárquica: conta-título (grupo) + conta analítica
     # 1.1.1.3.x → grupo "Aplicações de Liquidez Imediata"
     # 1.1.1.4.x → grupo "Aplicações Financeiras Diversas / Renda Fixa"
@@ -280,9 +300,9 @@ SOCIOS: set[str] = {
     "SERGIO AFONSO FELIPPE FILHO",
 }
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # CLASSIFICAÇÃO PATRIMONIAL
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def detect_class_sigma(code: str) -> str:
     c = code.strip()
@@ -336,7 +356,7 @@ def classes_compativeis(cls_sigma: str, cls_sci: str) -> bool:
     return cls_sigma == cls_sci
 
 
-# ── Bloqueio de instituição financeira ──────────────────────────────────────
+#  Bloqueio de instituição financeira 
 # Impede que o fuzzy-match cruze contas de instituições diferentes.
 # Ex: "Aplicação Sicredi" NUNCA pode sugerir "Aplicação Ailos".
 _INST_GROUPS: list[list[str]] = [
@@ -379,9 +399,9 @@ def _inst_group(name: str) -> str | None:
     return None
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # PARSERS MULTI-FORMATO (Sigma)
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 _ROW_RE  = re.compile(r"<(?:\w+:)?Row[^>]*>(.*?)</(?:\w+:)?Row>",
                       re.DOTALL | re.IGNORECASE)
@@ -390,7 +410,7 @@ _CELL_RE = re.compile(
     r"<(?:\w+:)?(?:Data|Cell)[^>]*>([^<]*)</(?:\w+:)?(?:Data|Cell)>", re.I)
 _SALDO_RE = re.compile(r"Saldo\s+[Ii]nicial", re.I)
 _DATE_RE  = re.compile(r"^\d{2}/\d{2}/\d{4}$")
-# ─── FIX: regex para remover prefixo de código do nome ───────────────────
+#  FIX: regex para remover prefixo de código do nome 
 _CODE_PREFIX_RE = re.compile(r"^\d[\d.]*\.\s*")
 
 
@@ -557,9 +577,9 @@ def parse_sigma_file(file_bytes: bytes, filename: str) -> dict:
     return {}
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # PARSER PLANO DE CONTAS SCI
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def parse_sci_plan(file_bytes: bytes, filename: str) -> dict[str, str]:
     sci: dict[str,str] = {}
@@ -661,9 +681,9 @@ def parse_sci_plan(file_bytes: bytes, filename: str) -> dict[str, str]:
     return sci
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # MOTOR DE MATCHING INTELIGENTE (4 estratégias + lock de classe)
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def smart_match(
     sigma_name: str,
@@ -682,7 +702,7 @@ def smart_match(
         tok_sci  = _tokens(name)
         inst_sci = _inst_group(name)      # instituição detectada no nome SCI
 
-        # ── Bloqueio de instituição ──────────────────────────────────────
+        #  Bloqueio de instituição 
         # Se Sigma menciona instituição X e SCI menciona instituição Y ≠ X
         # → score zero. Jamais sugerir "Ailos" para "Sicredi", etc.
         if inst_s and inst_sci and inst_s != inst_sci:
@@ -719,9 +739,9 @@ def smart_match(
     return results[:top_n]
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # CONSTRUTOR DO DE/PARA
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def build_depara_with_matches(accounts, sci_plan, persistent, extra) -> list[dict]:
     rows = []
@@ -755,20 +775,20 @@ def build_depara_with_matches(accounts, sci_plan, persistent, extra) -> list[dic
         if candidates: auto_code,auto_name,auto_score,auto_method = candidates[0]
 
         if excluir or sci_code == "EXCLUIR":
-            status, conf = "⛔ Excluído", 1.0
+            status, conf = "[X] Excluído", 1.0
         elif sci_code and source in ("base","salvo","base-prefix","sessão"):
-            status, conf = "✅ Confirmado", 1.0
+            status, conf = "[OK] Confirmado", 1.0
         elif auto_score >= 0.88:
-            status, conf = "🔵 Auto-match", auto_score
+            status, conf = "Auto-match", auto_score
             if not sci_code: sci_code,sci_name = auto_code,auto_name
         elif auto_score >= 0.60:
-            status, conf = "🟡 Sugerido", auto_score
+            status, conf = "Sugerido", auto_score
             if not sci_code: sci_code,sci_name = auto_code,auto_name
         elif auto_score > 0:
-            status, conf = "🟠 Baixa conf.", auto_score
+            status, conf = "Baixa conf.", auto_score
             if not sci_code: sci_code,sci_name = auto_code,auto_name
         else:
-            status, conf = "❓ Pendente", 0.0
+            status, conf = "[?] Pendente", 0.0
 
         rows.append({
             "sigma_code":  nc,
@@ -787,9 +807,9 @@ def build_depara_with_matches(accounts, sci_plan, persistent, extra) -> list[dic
     return rows
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # UTILITÁRIOS
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def get_sigma_code(key: str) -> str:
     m = re.match(r"^([\d.]+)", key.strip())
@@ -859,9 +879,9 @@ def assign_dc(code_a, val_a, code_b, val_b):
     return (code_b,code_a) if nat_b=="D" else (code_a,code_b)
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # DESDUPLICAÇÃO — 4 PASSOS
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def deduplicate(accounts: dict) -> tuple[list,list,dict]:
     all_movs: list[dict] = []
@@ -953,9 +973,9 @@ def deduplicate(accounts: dict) -> tuple[list,list,dict]:
         "total_bruto":len(all_movs),"pares":len(lancamentos),"sem_par":len(alertas)}
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # REGRAS DE NEGÓCIO
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 _NF_RE    = re.compile(r"despesa \(nota\)|nota de servi[cç]o|nf[e\s]\d+|nota fiscal|"
                        r"duplicata|boleto nf|pgto nota|nfs-e|contas a pagar\s*-",re.I)
@@ -1032,9 +1052,9 @@ def apply_rules(lancamentos, accounts, persistent, extra, periodo):
     return processados, alertas
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # GERADOR TXT
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def gerar_txt(lancamentos: list, periodo: str = "") -> bytes:
     fallback = f"{periodo}01" if periodo else "20260101"
@@ -1051,9 +1071,9 @@ def gerar_txt(lancamentos: list, periodo: str = "") -> bytes:
     return ("\r\n".join(linhas)+"\r\n").encode("cp1252",errors="replace")
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # GERADOR EXCEL AUDITÁVEL
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def gerar_planilha_auditoria(lancamentos: list, sci_plan: dict, per: str) -> bytes:
     try:
@@ -1118,9 +1138,9 @@ def gerar_planilha_auditoria(lancamentos: list, sci_plan: dict, per: str) -> byt
     buf=io.BytesIO(); wb.save(buf); return buf.getvalue()
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # HELPERS DE UI
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def metric_card(label: str, value: str, col, gold: bool = False):
     if gold:
@@ -1133,12 +1153,12 @@ def metric_card(label: str, value: str, col, gold: bool = False):
           <div class="metric-label">{label}</div></div>""", unsafe_allow_html=True)
 
 
-# ══════════════════════════════════════════════════════════════════════════
+# 
 # INTERFACE PRINCIPAL
-# ══════════════════════════════════════════════════════════════════════════
+# 
 
 def main():
-    # ── Hero com logo Domann ──────────────────────────────────────────
+    #  Hero com logo Domann 
     st.markdown(f"""
     <div class="hero">
       {DOMANN_LOGO_SVG}
@@ -1150,25 +1170,25 @@ def main():
         </div>
         <div class="hero-sub">Sigma → SCI &nbsp;·&nbsp; Empresa nº 29 &nbsp;·&nbsp;
           Auto Posto Murungava Ltda</div>
-        <div class="hero-tag">v3.2 — Motor Analítico com Lock Patrimonial</div>
+        <div class="hero-tag">v3.3 — Motor Analítico com Lock Patrimonial</div>
       </div>
     </div>""", unsafe_allow_html=True)
 
-    # ── Sidebar ───────────────────────────────────────────────────────
+    #  Sidebar 
     with st.sidebar:
-        st.markdown(f"### ⚙️ Configurações")
+        st.markdown(f"### Configurações")
         empresa_nome = st.text_input("Empresa", value="Auto Posto Murungava Ltda")
         periodo = st.text_input("Período (AAAАММ)",
                                 value=datetime.now().strftime("%Y%m"))
         st.divider()
         pers = load_persistent()
-        st.caption(f"💾 **{len(pers)}** mapeamentos confirmados")
+        st.caption(f"**{len(pers)}** mapeamentos confirmados")
 
-        # ── Exportar mapeamentos (essencial na nuvem) ──────────────────
+        # Exportar mapeamentos (essencial na nuvem) 
         if pers:
             pers_bytes = json.dumps(pers, ensure_ascii=False, indent=2).encode("utf-8")
             st.download_button(
-                "⬇️ Exportar mapeamentos (.json)",
+                "Exportar mapeamentos (.json)",
                 data=pers_bytes,
                 file_name="de_para_confirmado.json",
                 mime="application/json",
@@ -1176,20 +1196,20 @@ def main():
                 help="Baixe este arquivo e guarde. Na próxima sessão, importe-o para recuperar todos os mapeamentos confirmados.",
             )
 
-        # ── Importar mapeamentos ───────────────────────────────────────
-        imp = st.file_uploader("📤 Importar mapeamentos (.json)",
+        # Importar mapeamentos 
+        imp = st.file_uploader("Importar mapeamentos (.json)",
                                type=["json"], label_visibility="collapsed",
                                help="Importe o arquivo de_para_confirmado.json salvo anteriormente.")
         if imp is not None:
             try:
                 imported = json.load(imp)
                 save_persistent(imported)
-                st.success(f"✅ {len(imported)} mapeamentos importados!")
+                st.success(f"[OK] {len(imported)} mapeamentos importados!")
                 st.rerun()
             except Exception as ex:
                 st.error(f"Erro ao importar: {ex}")
 
-        if st.button("🗑️ Limpar cache", use_container_width=True):
+        if st.button("Limpar cache", use_container_width=True):
             for k in ["accounts","sci_plan","depara_rows","lancamentos",
                       "stats_dedup","alertas_dedup","alertas_regras"]:
                 st.session_state.pop(k,None)
@@ -1202,29 +1222,29 @@ def main():
                 if fn: FUNCIONARIOS_REG.add(fn)
 
     tab1, tab2, tab3, tab4 = st.tabs([
-        "📁  1 · Carregar Arquivos",
-        "🗺️  2 · DE/PARA & Mapeamentos",
-        "⚙️  3 · Processamento",
-        "📄  4 · Exportar",
+        "1 · Carregar Arquivos",
+        "2 · DE/PARA & Mapeamentos",
+        "3 · Processamento",
+        "4 · Exportar",
     ])
 
-    # ════════════════════════════════════════════════════════════════
+    # 
     # TAB 1 — UPLOAD
-    # ════════════════════════════════════════════════════════════════
+    # 
     with tab1:
         st.markdown("### Carregar arquivos do período")
-        st.markdown('<div class="gold-box">📎 Carregue a <strong>Movimentação Sigma</strong> '
+        st.markdown('<div class="gold-box">Carregue a <strong>Movimentação Sigma</strong> '
                     '(obrigatório) e o <strong>Plano de Contas SCI</strong> para ativar o '
                     'motor de matching com lock patrimonial automático.</div>',
                     unsafe_allow_html=True)
         c1,c2 = st.columns(2)
         with c1:
-            f_mov = st.file_uploader("📋 Movimentação Sigma *",
+            f_mov = st.file_uploader(" Movimentação Sigma *",
                                      type=["xls","xlsx","html","htm","xml","csv"],key="up_mov")
         with c2:
-            f_plano = st.file_uploader("📑 Plano de Contas SCI",
+            f_plano = st.file_uploader(" Plano de Contas SCI",
                                        type=["csv","xlsx","txt"],key="up_plano")
-        extra_raw = st.text_area("➕ Mapeamentos manuais (sigma_code=sci_code):",
+        extra_raw = st.text_area(" Mapeamentos manuais (sigma_code=sci_code):",
                                  placeholder="1.1.2.99=494099\n2.1.6.15=494100",height=60)
         extra_de_para: dict[str,str] = {}
         for line in extra_raw.strip().splitlines():
@@ -1232,17 +1252,17 @@ def main():
                 k,v=line.split("=",1); extra_de_para[k.strip()]=v.strip()
 
         st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
-        btn_load = st.button("🔍 Analisar Arquivos",type="primary",use_container_width=True)
+        btn_load = st.button(" Analisar Arquivos",type="primary",use_container_width=True)
 
         if btn_load:
-            if not f_mov: st.error("⚠️ Carregue a Movimentação Sigma."); st.stop()
+            if not f_mov: st.error("[!] Carregue a Movimentação Sigma."); st.stop()
             sci_plan: dict[str,str] = {}
             if f_plano:
                 with st.spinner("Lendo Plano de Contas SCI..."):
                     try: sci_plan = parse_sci_plan(f_plano.read(), f_plano.name)
                     except Exception as ex: st.warning(f"Erro SCI: {ex}")
-                if sci_plan: st.success(f"✅ Plano SCI: **{len(sci_plan)}** contas.")
-                else: st.warning("⚠️ Plano SCI não lido — matching limitado ao DE/PARA base.")
+                if sci_plan: st.success(f"[OK] Plano SCI: **{len(sci_plan)}** contas.")
+                else: st.warning("[!] Plano SCI não lido — matching limitado ao DE/PARA base.")
             with st.spinner(f"Lendo movimentação ({f_mov.name})..."):
                 mov_bytes = f_mov.read()
                 fmt_det   = _detect_format(mov_bytes, f_mov.name)
@@ -1252,7 +1272,7 @@ def main():
                     st.code(f"Formato: {fmt_det} | {len(mov_bytes):,} bytes\n{mov_bytes[:300]}")
                     st.stop()
             if not accounts:
-                st.error("❌ Não foi possível ler a movimentação.")
+                st.error("[X] Não foi possível ler a movimentação.")
                 try: sample=mov_bytes[:600].decode("windows-1252",errors="replace")
                 except Exception: sample=str(mov_bytes[:300])
                 st.code(sample); st.stop()
@@ -1276,7 +1296,7 @@ def main():
             metric_card("Movimentos",    f"{n_movs:,}",         cc[1])
             metric_card("Volume bruto",  f"R$ {total_val:,.0f}",cc[2], gold=True)
             metric_card("Contas SCI",    f"{len(sci_plan)}",    cc[3])
-            with st.expander("🔎 Prévia das contas Sigma"):
+            with st.expander(" Prévia das contas Sigma"):
                 import pandas as pd
                 df = pd.DataFrame([{
                     "Código":get_sigma_code(k),"Classe":detect_class_sigma(get_sigma_code(k)),
@@ -1286,21 +1306,21 @@ def main():
                 } for k,d in sorted(accounts.items())])
                 st.dataframe(df, use_container_width=True, hide_index=True)
 
-    # ════════════════════════════════════════════════════════════════
+    # 
     # TAB 2 — DE/PARA & MAPEAMENTOS
-    # ════════════════════════════════════════════════════════════════
+    # 
     with tab2:
         if "accounts" not in st.session_state:
-            st.info("⬅️ Carregue os arquivos na aba 1 primeiro."); st.stop()
+            st.info("Carregue os arquivos na aba 1 primeiro."); st.stop()
 
         accounts   = st.session_state.accounts
         sci_plan   = st.session_state.get("sci_plan",{})
         extra_map  = st.session_state.get("extra_depara",{})
         persistent = load_persistent()
 
-        st.markdown("### 🗺️ Mapeamento DE/PARA — Sigma → SCI")
+        st.markdown("###  Mapeamento DE/PARA — Sigma → SCI")
         st.markdown(
-            '<div class="gold-box">🔒 <strong>Lock Patrimonial</strong>: '
+            '<div class="gold-box"> <strong>Lock Patrimonial</strong>: '
             'o motor só cruza contas da mesma classe (Ativo↔Ativo, Passivo↔Passivo). '
             'Use a seção <em>Alterar Sugestão</em> para corrigir sugestões erradas, '
             'e a seção <em>Resolver Pendências</em> para contas sem mapeamento.</div>',
@@ -1313,11 +1333,11 @@ def main():
         else:
             rows = st.session_state.depara_rows
 
-        n_conf = sum(1 for r in rows if "✅" in r["status"])
-        n_auto = sum(1 for r in rows if "🔵" in r["status"])
-        n_sug  = sum(1 for r in rows if "🟡" in r["status"])
-        n_pend = sum(1 for r in rows if "❓" in r["status"])
-        n_ex   = sum(1 for r in rows if "⛔" in r["status"])
+        n_conf = sum(1 for r in rows if "[OK]" in r["status"])
+        n_auto = sum(1 for r in rows if "" in r["status"])
+        n_sug  = sum(1 for r in rows if "" in r["status"])
+        n_pend = sum(1 for r in rows if "[?]" in r["status"])
+        n_ex   = sum(1 for r in rows if "[X]" in r["status"])
 
         sc1,sc2,sc3,sc4,sc5 = st.columns(5)
         metric_card("Confirmados",str(n_conf),sc1,gold=True)
@@ -1331,12 +1351,12 @@ def main():
         with cf1:
             filtro_status = st.multiselect(
                 "Filtrar:",
-                ["✅ Confirmado","🔵 Auto-match","🟡 Sugerido","🟠 Baixa conf.",
-                 "❓ Pendente","⛔ Excluído"],
-                default=["✅ Confirmado","🔵 Auto-match","🟡 Sugerido","🟠 Baixa conf.","❓ Pendente"],
+                ["[OK] Confirmado","Auto-match","Sugerido","Baixa conf.",
+                 "[?] Pendente","[X] Excluído"],
+                default=["[OK] Confirmado","Auto-match","Sugerido","Baixa conf.","[?] Pendente"],
                 label_visibility="collapsed")
         with cf2:
-            busca = st.text_input("🔍", value="", placeholder="Buscar conta...", label_visibility="collapsed")
+            busca = st.text_input("", value="", placeholder="Buscar conta...", label_visibility="collapsed")
 
         rows_filt = [r for r in rows if not filtro_status or r["status"] in filtro_status]
         if busca and busca != "placeholder":
@@ -1346,7 +1366,7 @@ def main():
                        or bq in (r.get("sci_code") or "").lower()
                        or bq in (r.get("sci_name") or "").lower()]
 
-        # ── Tabela principal ────────────────────────────────────────
+        #  Tabela principal 
         import pandas as pd
         df_show = pd.DataFrame([{
             "Status":          r["status"],
@@ -1355,7 +1375,7 @@ def main():
             "Classe":          r["sigma_class"],
             "Movs.":           r["n_movs"],
             "Total R$":        r["total_rs"],
-            "Código SCI ✏️":   r["sci_code"],
+            "Código SCI ":   r["sci_code"],
             "Nome SCI":        r["sci_name"],
             "Conf. %":         int(r["confidence"]*100),
             "Método":          r["method"],
@@ -1370,7 +1390,7 @@ def main():
                 "Classe":        st.column_config.TextColumn("Classe",width="small",disabled=True),
                 "Movs.":         st.column_config.NumberColumn("Movs.",width="small",disabled=True),
                 "Total R$":      st.column_config.NumberColumn("Total R$",format="R$ %.2f",disabled=True),
-                "Código SCI ✏️": st.column_config.TextColumn("Cód. SCI ✏️",width="small",
+                "Código SCI ": st.column_config.TextColumn("Cód. SCI ",width="small",
                                      help="Digite o código SCI diretamente"),
                 "Nome SCI":      st.column_config.TextColumn("Nome SCI (auto)",width="large",disabled=True),
                 "Conf. %":       st.column_config.ProgressColumn("Conf.",min_value=0,max_value=100,width="small"),
@@ -1381,7 +1401,7 @@ def main():
 
         cs1,cs2 = st.columns([1,3])
         with cs1:
-            btn_save = st.button("💾 Salvar Mapeamentos",type="primary",use_container_width=True)
+            btn_save = st.button(" Salvar Mapeamentos",type="primary",use_container_width=True)
         with cs2:
             st.markdown('<div class="ok-box" style="margin:0">Grava em '
                         '<code>de_para_confirmado.json</code> — '
@@ -1391,11 +1411,11 @@ def main():
             to_save: dict[str,str] = {}
             for _,row in edited.iterrows():
                 sg=str(row["Cód. Sigma"]).strip()
-                sc_code=str(row["Código SCI ✏️"]).strip()
+                sc_code=str(row["Código SCI "]).strip()
                 if sg and sc_code and sc_code not in ("nan","","EXCLUIR"):
                     to_save[sg]=sc_code
             save_persistent(to_save)
-            edit_map={str(row["Cód. Sigma"]):str(row["Código SCI ✏️"]).strip()
+            edit_map={str(row["Cód. Sigma"]):str(row["Código SCI "]).strip()
                       for _,row in edited.iterrows()}
             new_rows=[]
             for r in st.session_state.depara_rows:
@@ -1403,23 +1423,23 @@ def main():
                 ec=edit_map.get(r["sigma_code"],"")
                 if ec and ec not in ("nan",""):
                     nr["sci_code"]=ec; nr["sci_name"]=sci_plan.get(ec,"")
-                    nr["status"]="✅ Confirmado"; nr["confidence"]=1.0
+                    nr["status"]="[OK] Confirmado"; nr["confidence"]=1.0
                 new_rows.append(nr)
             st.session_state.depara_rows=new_rows
-            st.success(f"✅ {len(to_save)} mapeamentos salvos.")
+            st.success(f"[OK] {len(to_save)} mapeamentos salvos.")
 
-        # ── SEÇÃO: ALTERAR SUGESTÃO (para corrigir sugestões erradas) ──
+        #  SEÇÃO: ALTERAR SUGESTÃO (para corrigir sugestões erradas) 
         st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
         altera_rows = [r for r in rows
-                       if r["status"] in ("🔵 Auto-match","🟡 Sugerido","🟠 Baixa conf.")
+                       if r["status"] in ("Auto-match","Sugerido","Baixa conf.")
                        and (r.get("candidates") or sci_plan)]
 
         if altera_rows:
             with st.expander(
-                f"🔄 Alterar Sugestão Automática — {len(altera_rows)} contas disponíveis",
+                f" Alterar Sugestão Automática — {len(altera_rows)} contas disponíveis",
                 expanded=(n_auto+n_sug > 0 and n_pend == 0)):
                 st.markdown(
-                    '<div class="warn-box">⚠️ O sistema sugeriu automaticamente as contas '
+                    '<div class="warn-box">[!] O sistema sugeriu automaticamente as contas '
                     'abaixo. Se alguma estiver <strong>errada</strong>, selecione a conta '
                     'correta (filtrada pela classe patrimonial) e clique em '
                     '<strong>Aplicar</strong>.</div>',
@@ -1477,7 +1497,7 @@ def main():
                                        "  |  ".join(f"`{c}` {n[:25]} ({int(s*100)}%)"
                                                     for c,n,s,_ in cands[:5]))
                     with col_b:
-                        if st.button("✅ Aplicar", key=f"btn_alt_{r['sigma_code']}",
+                        if st.button("[OK] Aplicar", key=f"btn_alt_{r['sigma_code']}",
                                      use_container_width=True):
                             if sel not in ("— manter atual —",""):
                                 code_sel = sel.split(" — ")[0].strip() if " — " in sel else sel.strip()
@@ -1493,15 +1513,15 @@ def main():
                         if r["sigma_code"] in confirmed_changes:
                             nr["sci_code"]=confirmed_changes[r["sigma_code"]]
                             nr["sci_name"]=sci_plan.get(nr["sci_code"],"")
-                            nr["status"]="✅ Confirmado"; nr["confidence"]=1.0
+                            nr["status"]="[OK] Confirmado"; nr["confidence"]=1.0
                         new_rows.append(nr)
                     st.session_state.depara_rows=new_rows
 
-        # ── SEÇÃO: RESOLVER PENDÊNCIAS ────────────────────────────────
-        pendentes = [r for r in rows if "❓" in r["status"]]
+        #  SEÇÃO: RESOLVER PENDÊNCIAS 
+        pendentes = [r for r in rows if "[?]" in r["status"]]
         if pendentes:
             st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
-            with st.expander(f"❓ Resolver Pendências — {len(pendentes)} contas sem mapeamento"):
+            with st.expander(f"[?] Resolver Pendências — {len(pendentes)} contas sem mapeamento"):
                 st.markdown(
                     '<div class="warn-box">Contas Sigma sem correspondência no DE/PARA. '
                     'Selecione a conta SCI correta e confirme.</div>',
@@ -1538,13 +1558,13 @@ def main():
                                 index=pre_idx,
                                 key=f"pend_{r['sigma_code']}")
                         with pcb:
-                            if st.button("✅",key=f"btn_pend_{r['sigma_code']}",
+                            if st.button("[OK]",key=f"btn_pend_{r['sigma_code']}",
                                          use_container_width=True):
                                 if sel_p != "— Selecione —":
                                     code_sel=sel_p.split(" — ")[0].strip()
                                     save_persistent({r["sigma_code"]:code_sel})
                                     confirmed_pend[r["sigma_code"]]=code_sel
-                                    st.success(f"✅ {r['sigma_code']} → {code_sel}")
+                                    st.success(f"[OK] {r['sigma_code']} → {code_sel}")
                     if confirmed_pend:
                         new_rows=[]
                         for r in st.session_state.depara_rows:
@@ -1552,16 +1572,16 @@ def main():
                             if r["sigma_code"] in confirmed_pend:
                                 nr["sci_code"]=confirmed_pend[r["sigma_code"]]
                                 nr["sci_name"]=sci_plan.get(nr["sci_code"],"")
-                                nr["status"]="✅ Confirmado"; nr["confidence"]=1.0
+                                nr["status"]="[OK] Confirmado"; nr["confidence"]=1.0
                             new_rows.append(nr)
                         st.session_state.depara_rows=new_rows
 
-    # ════════════════════════════════════════════════════════════════
+    # 
     # TAB 3 — PROCESSAMENTO
-    # ════════════════════════════════════════════════════════════════
+    # 
     with tab3:
         if "accounts" not in st.session_state:
-            st.info("⬅️ Carregue os arquivos na aba 1 primeiro."); st.stop()
+            st.info("Carregue os arquivos na aba 1 primeiro."); st.stop()
         accounts   = st.session_state.accounts
         per        = st.session_state.get("periodo", periodo)
         persistent = load_persistent()
@@ -1573,8 +1593,8 @@ def main():
                     depara_editado[r["sigma_code"]]=r["sci_code"]
         merged_extra={**extra_map,**depara_editado}
 
-        st.markdown("### ⚙️ Processamento contábil")
-        btn_proc=st.button("▶️ Executar processamento completo",type="primary",use_container_width=True)
+        st.markdown("###  Processamento contábil")
+        btn_proc=st.button(" Executar processamento completo",type="primary",use_container_width=True)
 
         if btn_proc or "lancamentos" in st.session_state:
             if btn_proc:
@@ -1618,40 +1638,40 @@ def main():
                         "Valor":l.get("valor",0),"Desc":(l.get("desc") or "")[:40],
                     } for l in pend_l[:50]]),use_container_width=True,hide_index=True)
                 else:
-                    st.markdown('<div class="ok-box">✅ Todos os lançamentos têm D e C preenchidos.</div>',
+                    st.markdown('<div class="ok-box">[OK] Todos os lançamentos têm D e C preenchidos.</div>',
                                 unsafe_allow_html=True)
 
             if alertas_dedup:
-                with st.expander(f"⚠️ {len(alertas_dedup)} SEM PAR"):
+                with st.expander(f"[!] {len(alertas_dedup)} SEM PAR"):
                     st.dataframe(pd.DataFrame([{
                         "Data":a["date"],"Conta":a["code"],
                         "Valor":a["valor"],"Desc":(a["desc"] or "")[:50]}
                         for a in alertas_dedup[:100]]),use_container_width=True,hide_index=True)
             if alertas_regras:
-                with st.expander(f"👤 {len(alertas_regras)} alertas sócios"):
+                with st.expander(f" {len(alertas_regras)} alertas sócios"):
                     for a in alertas_regras:
                         st.markdown(f"- **{a.get('tipo')}** | {a.get('date')} | "
                                     f"R$ {a.get('valor',0):,.2f} | {a.get('desc','')[:60]}")
-            with st.expander("📋 Preview (primeiros 100)"):
+            with st.expander(" Preview (primeiros 100)"):
                 st.dataframe(pd.DataFrame([{
                     "Data":date_br(l["data"]),"Tipo":l.get("tipo",""),
                     "D":l.get("sci_d",""),"C":l.get("sci_c",""),
                     "Valor":l["valor"],"Desc":(l.get("desc") or "")[:38],
                 } for l in lancamentos[:100]]),use_container_width=True,hide_index=True)
 
-    # ════════════════════════════════════════════════════════════════
+    # 
     # TAB 4 — EXPORTAR
-    # ════════════════════════════════════════════════════════════════
+    # 
     with tab4:
         if "lancamentos" not in st.session_state:
-            st.info("⬅️ Execute o processamento na aba 3 primeiro."); st.stop()
+            st.info("Execute o processamento na aba 3 primeiro."); st.stop()
         lancamentos = st.session_state.lancamentos
         per         = st.session_state.get("periodo", periodo)
         emp         = st.session_state.get("empresa_nome", empresa_nome)
         stats       = st.session_state.get("stats_dedup",{})
         sci_plan    = st.session_state.get("sci_plan",{})
 
-        st.markdown("### 📄 Exportar Arquivos")
+        st.markdown("###  Exportar Arquivos")
         fc1,fc2=st.columns(2)
         with fc1:
             incl_pend=st.checkbox("Incluir lançamentos com pendência D/C",value=True)
@@ -1676,20 +1696,20 @@ def main():
         st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
         txt_bytes=gerar_txt(lancs_export, per)
 
-        with st.expander("👁️ Preview TXT (30 primeiras linhas)"):
+        with st.expander(" Preview TXT (30 primeiras linhas)"):
             st.code("\n".join(txt_bytes.decode("cp1252",errors="replace").splitlines()[:30]),
                     language=None)
 
         dl1,dl2,dl3=st.columns(3)
         with dl1:
-            st.download_button("⬇️ Baixar TXT para SCI",data=txt_bytes,
+            st.download_button(" Baixar TXT para SCI",data=txt_bytes,
                                file_name=nome_txt,mime="text/plain",
                                type="primary",use_container_width=True)
         with dl2:
             if gerar_excel:
                 with st.spinner("Gerando Excel..."):
                     xlsx_bytes=gerar_planilha_auditoria(lancs_export,sci_plan,per)
-                st.download_button("⬇️ Baixar Excel Auditável",data=xlsx_bytes,
+                st.download_button(" Baixar Excel Auditável",data=xlsx_bytes,
                                    file_name=nome_xlsx,
                                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                    use_container_width=True)
@@ -1698,36 +1718,15 @@ def main():
             rel="\n".join([
                 "DOMANN CONTABILIDADE","Sistema de Integração Sigma → SCI","="*50,
                 f"Empresa  : {emp}",f"Período  : {per}",
-                      f"Gerado   : {datetime.now().strftime('%d/%m/%Y %H:%M')}","─"*50,
+                      f"Gerado   : {datetime.now().strftime('%d/%m/%Y %H:%M')}",""*50,
                 f"Movs. brutos       : {stats.get('total_bruto',0):>8,}",
                 f"Pares deduplicados : {stats.get('pares',0):>8,}",
                 f"Sem par (alertas)  : {stats.get('sem_par',0):>8,}",
                 f"Exportados         : {len(lancs_export):>8,}",
                 f"  Completos (D+C)  : {len(completos_exp):>8,}",
                 f"  Pendências       : {len(pend_exp):>8,}",
-                f"Volume total       : R$ {total_val:>14,.2f}","─"*50,
+                f"Volume total       : R$ {total_val:>14,.2f}",""*50,
                 "TIPOS:",]+[f"  {t:<25}: {n:>6}"
                             for t,n in sorted(tipos.items(),key=lambda x:-x[1])])
-            st.download_button("⬇️ Relatório .txt",
-                               data=rel.encode("utf-8"),
-                               file_name=f"Relatorio_{per}.txt",
-                               mime="text/plain",use_container_width=True)
-
-        st.markdown('<div class="gold-box">📋 <strong>Formato TXT</strong>: '
-                    'Windows-1252 (ANSI) · CRLF · 10 campos · '
-                    'campo 7 = complemento · campo 8 = nº doc · '
-                    'data = AAAAMMDD · natureza = D fixo</div>',
-                    unsafe_allow_html=True)
-
-    # ── Rodapé ────────────────────────────────────────────────────────
-    st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
-    st.markdown(
-        f'<div style="text-align:center;color:#94A3B8;font-size:.75rem;">'
-        f'Domann Contabilidade &nbsp;·&nbsp; Sistema Integração Sigma→SCI v3.2 &nbsp;·&nbsp; '
-        f'Diego Domann CRC PR-070307/O-9 &nbsp;·&nbsp; '
-        f'{datetime.now().strftime("%d/%m/%Y")}</div>',
-        unsafe_allow_html=True)
-
-
-if __name__ == "__main__" or True:
-    main()
+            st.download_button(" Relatório .txt",
+                               data=rel.encode("utf-8          
