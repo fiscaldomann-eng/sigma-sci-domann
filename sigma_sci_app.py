@@ -1,9 +1,9 @@
 """
 
-   INTEGRAÇÃO SIGMA → SCI  v3.3  — Domann Contabilidade                 
-   Auto Posto Murungava Ltda | Empresa SCI nº 29                         
+   INTEGRAÇÃO SIGMA → SCI  v3.4  — Domann Contabilidade
+   Auto Posto Murungava Ltda | Empresa SCI nº 29
 
-   v3.3: Paleta real · Logo fiel · Sem emojis · Design moderno          
+   v3.4: Identidade visual alinhada a diegodomann.com.br
 
 """
 
@@ -19,22 +19,16 @@ import streamlit as st
 
 DOMANN_LOGO_SVG = (
     '<svg viewBox="0 0 300 76" xmlns="http://www.w3.org/2000/svg" width="300" height="76">'
-    # Escudo (shield) — fundo escuro
-    '<path d="M4 4 L4 48 Q4 68 34 74 Q64 68 64 48 L64 4 Z" fill="#333232"/>'
-    # Borda ouro do escudo
-    '<path d="M4 4 L4 48 Q4 68 34 74 Q64 68 64 48 L64 4 Z" fill="none" stroke="#AC996F" stroke-width="2"/>'
-    # Linha vertical central
-    '<line x1="34" y1="4" x2="34" y2="68" stroke="#AC996F" stroke-width="1.2" stroke-opacity="0.7"/>'
-    # Linha horizontal central
-    '<line x1="4" y1="36" x2="64" y2="36" stroke="#AC996F" stroke-width="1.2" stroke-opacity="0.7"/>'
-    # Letras D O M N
+    '<path d="M4 4 L4 48 Q4 68 34 74 Q64 68 64 48 L64 4 Z" fill="#322d33"/>'
+    '<path d="M4 4 L4 48 Q4 68 34 74 Q64 68 64 48 L64 4 Z" fill="none" stroke="#b8965a" stroke-width="2"/>'
+    '<line x1="34" y1="4" x2="34" y2="68" stroke="#b8965a" stroke-width="1.2" stroke-opacity="0.7"/>'
+    '<line x1="4" y1="36" x2="64" y2="36" stroke="#b8965a" stroke-width="1.2" stroke-opacity="0.7"/>'
     '<text x="19" y="27" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">D</text>'
     '<text x="49" y="27" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">O</text>'
     '<text x="19" y="60" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">M</text>'
     '<text x="49" y="60" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">N</text>'
-    # Nome e subtítulo
     '<text x="78" y="36" font-family="Georgia,Times New Roman,serif" font-size="26" font-weight="bold" fill="#FFFFFF" letter-spacing="1">DOMANN</text>'
-    '<text x="80" y="54" font-family="Arial,Helvetica,sans-serif" font-size="9" fill="#AC996F" letter-spacing="3.5">CONTABILIDADE</text>'
+    '<text x="80" y="54" font-family="Arial,Helvetica,sans-serif" font-size="9" fill="#b8965a" letter-spacing="3.5">CONTABILIDADE</text>'
     '</svg>'
 )
 
@@ -49,104 +43,167 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Paleta Domann: Paleta real da identidade visual
-_DOMANN_DARK  = "#333232"  # Carvão escuro — primário
-_DOMANN_NAVY  = "#2A2929"  # Variante mais escura
-_DOMANN_GOLD  = "#AC996F"  # Ouro claro — realce
-_DOMANN_GOLD2 = "#8B7B4C"  # Ouro escuro — textos
-_DOMANN_TEXT  = "#F0EEE8"  # Off-white quente
+# Paleta exata de diegodomann.com.br
+_DOMANN_DARK      = "#322d33"   # --dark (header, hero)
+_DOMANN_DEEP      = "#1e1a1f"   # --dark-deep
+_DOMANN_GOLD      = "#b8965a"   # --gold (CTAs, bordas, realces)
+_DOMANN_GOLD_L    = "#d4ae78"   # --gold-light
+_DOMANN_CREAM     = "#faf8f4"   # --cream (fundo de conteúdo)
+_DOMANN_TEXT      = "#4a4348"   # --text-body
+_DOMANN_MUTED     = "#7a7078"   # --text-muted
+_DOMANN_BORDER    = "rgba(184,150,90,0.2)"  # --border
 
 st.markdown(f"""
 <style>
-/*  Reset e Base  */
-.block-container {{ padding:1.2rem 2rem 2rem; max-width:1440px; }}
-h1,h2,h3 {{ color:{_DOMANN_DARK} !important; font-family:'Segoe UI',system-ui,sans-serif; }}
-body {{ font-family:'Segoe UI',system-ui,sans-serif; }}
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,600&display=swap');
 
-/*  Hero Domann  */
+/* ── Base ── */
+html, body, [class*="css"] {{
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: {_DOMANN_CREAM};
+  color: {_DOMANN_TEXT};
+}}
+.block-container {{ padding:1.2rem 2rem 2rem; max-width:1440px; }}
+h1,h2,h3 {{
+  font-family: 'Playfair Display', Georgia, serif;
+  color: {_DOMANN_DARK} !important;
+}}
+
+/* ── Hero Domann ── */
 .hero {{
-  background: linear-gradient(135deg,{_DOMANN_DARK} 0%,{_DOMANN_NAVY} 100%);
-  border-radius:12px; padding:1.4rem 2rem; margin-bottom:1.6rem;
+  background: linear-gradient(135deg, {_DOMANN_DARK} 0%, {_DOMANN_DEEP} 100%);
+  border-radius:4px; padding:1.4rem 2rem; margin-bottom:1.6rem;
   display:flex; align-items:center; gap:1.8rem;
-  border-bottom:3px solid {_DOMANN_GOLD};
-  box-shadow: 0 2px 16px rgba(0,0,0,.25);
+  border-bottom:2px solid {_DOMANN_GOLD};
+  box-shadow: 0 4px 24px rgba(30,26,31,.35);
+}}
+.hero-title {{
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size:1.15rem; font-weight:700;
+  color:#ffffff; letter-spacing:.3px;
 }}
 .hero-sub {{
-  color:rgba(255,255,255,.6); font-size:.80rem; margin:.2rem 0 0;
-  letter-spacing:.4px; font-family:'Segoe UI',system-ui,sans-serif;
+  color:rgba(255,255,255,.55); font-size:.78rem; margin:.25rem 0 0;
+  letter-spacing:.4px; font-family:'Inter', sans-serif;
 }}
 .hero-tag {{
   display:inline-block; background:{_DOMANN_GOLD}22;
-  border:1px solid {_DOMANN_GOLD}66; border-radius:4px;
-  padding:2px 10px; font-size:.72rem; color:{_DOMANN_GOLD}; margin-top:.5rem;
-  letter-spacing:.5px; text-transform:uppercase; font-weight:600;
+  border:1px solid {_DOMANN_GOLD}88; border-radius:4px;
+  padding:3px 10px; font-size:.68rem; color:{_DOMANN_GOLD}; margin-top:.6rem;
+  letter-spacing:1px; text-transform:uppercase; font-weight:600;
+  font-family:'Inter', sans-serif;
 }}
 
-/*  Tabs  */
+/* ── Tabs ── */
 .stTabs [data-baseweb="tab-list"] {{
-  background:#F4F4F2; padding:3px; border-radius:8px; gap:2px;
-  border:1px solid #E0DDD8;
+  background:#eeebe4; padding:3px; border-radius:4px; gap:2px;
+  border:1px solid {_DOMANN_BORDER};
 }}
 .stTabs [data-baseweb="tab"] {{
-  border-radius:6px; padding:.45rem 1.1rem; font-weight:600;
-  font-size:.86rem; color:#5A5650; border:none !important;
+  border-radius:3px; padding:.45rem 1.1rem; font-weight:600;
+  font-size:.85rem; color:{_DOMANN_MUTED}; border:none !important;
+  font-family:'Inter', sans-serif;
 }}
 .stTabs [aria-selected="true"] {{
   background:{_DOMANN_DARK} !important; color:#fff !important;
 }}
 
-/*  Metric cards  */
+/* ── Metric cards ── */
 .metric-card {{
-  background:#FAFAF9; border:1px solid #E5E2DC; border-radius:8px;
+  background:#ffffff; border:1px solid {_DOMANN_BORDER}; border-radius:4px;
   padding:1rem 1.2rem; text-align:center;
-  box-shadow:0 1px 3px rgba(0,0,0,.05);
+  box-shadow:0 1px 4px rgba(50,45,51,.06);
 }}
-.metric-value {{ font-size:1.9rem; font-weight:700; color:{_DOMANN_DARK}; }}
-.metric-label {{ font-size:.76rem; color:#6B6560; margin-top:2px; text-transform:uppercase; letter-spacing:.4px; }}
+.metric-value {{ font-size:1.9rem; font-weight:700; color:{_DOMANN_DARK}; font-family:'Inter', sans-serif; }}
+.metric-label {{ font-size:.72rem; color:{_DOMANN_MUTED}; margin-top:3px; text-transform:uppercase; letter-spacing:.6px; }}
 .metric-card-gold {{
-  background:{_DOMANN_GOLD}0F; border:1px solid {_DOMANN_GOLD}55;
-  border-radius:8px; padding:1rem 1.2rem; text-align:center;
-  box-shadow:0 1px 3px rgba(0,0,0,.05);
+  background:{_DOMANN_CREAM}; border:1px solid {_DOMANN_GOLD}55;
+  border-radius:4px; padding:1rem 1.2rem; text-align:center;
+  box-shadow:0 1px 4px rgba(50,45,51,.06);
 }}
-.metric-value-gold {{ font-size:1.9rem; font-weight:700; color:{_DOMANN_GOLD2}; }}
+.metric-value-gold {{ font-size:1.9rem; font-weight:700; color:{_DOMANN_GOLD}; font-family:'Inter', sans-serif; }}
 
-/*  Info boxes  */
+/* ── Info boxes ── */
 .info-box {{ background:#EFF6FF; border-left:3px solid #3B82F6;
-            padding:.75rem 1rem; border-radius:0 6px 6px 0; font-size:.86rem; margin:.5rem 0; }}
+            padding:.75rem 1rem; border-radius:0 4px 4px 0; font-size:.85rem; margin:.5rem 0; }}
 .warn-box {{ background:#FFFBEB; border-left:3px solid #F59E0B;
-            padding:.75rem 1rem; border-radius:0 6px 6px 0; font-size:.86rem; margin:.5rem 0; }}
+            padding:.75rem 1rem; border-radius:0 4px 4px 0; font-size:.85rem; margin:.5rem 0; }}
 .ok-box   {{ background:#F0FDF4; border-left:3px solid #22C55E;
-            padding:.75rem 1rem; border-radius:0 6px 6px 0; font-size:.86rem; margin:.5rem 0; }}
+            padding:.75rem 1rem; border-radius:0 4px 4px 0; font-size:.85rem; margin:.5rem 0; }}
 .gold-box {{ background:{_DOMANN_GOLD}0D; border-left:3px solid {_DOMANN_GOLD};
-            padding:.75rem 1rem; border-radius:0 6px 6px 0; font-size:.86rem; margin:.5rem 0; }}
-.pend-card {{ background:#FFFEF7; border:1px solid #E8D87A; border-radius:8px;
+            padding:.75rem 1rem; border-radius:0 4px 4px 0; font-size:.85rem; margin:.5rem 0; }}
+.pend-card {{ background:#fffef7; border:1px solid #e0c96a; border-radius:4px;
               padding:.9rem 1rem; margin:.4rem 0; }}
-.alt-card  {{ background:#FAFAF8; border:1px solid {_DOMANN_GOLD}44;
-              border-radius:8px; padding:.9rem 1rem; margin:.4rem 0; }}
+.alt-card  {{ background:#ffffff; border:1px solid {_DOMANN_BORDER};
+              border-radius:4px; padding:.9rem 1rem; margin:.4rem 0; }}
 
-/*  Botões  */
-.stButton>button[kind="primary"] {{
-  background:{_DOMANN_DARK};
-  color:#fff; border:1px solid {_DOMANN_GOLD}44; border-radius:6px;
-  font-weight:600; padding:.5rem 1.4rem;
-  transition:all .15s ease;
+/* ── Botões ── */
+.stButton>button {{
+  background:{_DOMANN_GOLD}; color:{_DOMANN_DEEP};
+  border:none; border-radius:4px; font-weight:600;
+  padding:.5rem 1.6rem; letter-spacing:.3px;
+  font-family:'Inter', sans-serif;
+  transition:background .15s ease;
 }}
-.stButton>button[kind="primary"]:hover {{
-  background:{_DOMANN_NAVY}; border-color:{_DOMANN_GOLD};
+.stButton>button:hover {{
+  background:{_DOMANN_GOLD_L} !important; color:{_DOMANN_DEEP} !important;
+}}
+.stButton>button[kind="secondary"] {{
+  background:transparent; color:{_DOMANN_DARK};
+  border:1px solid {_DOMANN_BORDER};
+}}
+.stButton>button[kind="secondary"]:hover {{
+  background:{_DOMANN_CREAM} !important; color:{_DOMANN_DARK} !important;
+  border-color:{_DOMANN_GOLD} !important;
 }}
 
-/*  Divisor dourado  */
+/* ── Download button ── */
+.stDownloadButton>button {{
+  background:{_DOMANN_DARK}; color:#fff;
+  border:1px solid {_DOMANN_GOLD}55; border-radius:4px;
+  font-weight:600; font-family:'Inter', sans-serif;
+}}
+.stDownloadButton>button:hover {{
+  background:{_DOMANN_DEEP} !important; border-color:{_DOMANN_GOLD} !important;
+}}
+
+/* ── Divisor dourado ── */
 .gold-divider {{
   height:1px;
   background:linear-gradient(90deg,transparent,{_DOMANN_GOLD}66,transparent);
   margin:1.4rem 0; border:none;
 }}
 
-/*  Tabela  */
+/* ── Tabela ── */
 .dataframe thead th {{
   background:{_DOMANN_DARK} !important; color:#fff !important;
-  font-size:.82rem; font-weight:600;
+  font-size:.82rem; font-weight:600; font-family:'Inter', sans-serif;
 }}
+.dataframe tbody tr:nth-child(even) {{ background:{_DOMANN_CREAM}; }}
+
+/* ── Inputs ── */
+.stTextInput>div>div>input, .stTextArea>div>div>textarea {{
+  border:1px solid {_DOMANN_BORDER}; border-radius:4px;
+  font-family:'Inter', sans-serif; color:{_DOMANN_TEXT};
+  background:#ffffff;
+}}
+.stSelectbox>div>div {{
+  border:1px solid {_DOMANN_BORDER}; border-radius:4px;
+}}
+
+/* ── File uploader ── */
+.stFileUploader {{
+  border:1px dashed {_DOMANN_GOLD}66 !important;
+  border-radius:4px; background:{_DOMANN_CREAM};
+}}
+
+/* ── Sidebar ── */
+[data-testid="stSidebar"] {{
+  background:{_DOMANN_DARK};
+  border-right:1px solid {_DOMANN_GOLD}33;
+}}
+[data-testid="stSidebar"] * {{ color:#ffffff !important; font-family:'Inter',sans-serif; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -1170,7 +1227,7 @@ def main():
         </div>
         <div class="hero-sub">Sigma → SCI &nbsp;·&nbsp; Empresa nº 29 &nbsp;·&nbsp;
           Auto Posto Murungava Ltda</div>
-        <div class="hero-tag">v3.3 — Motor Analítico com Lock Patrimonial</div>
+        <div class="hero-tag">v3.4 — Motor Analítico com Lock Patrimonial</div>
       </div>
     </div>""", unsafe_allow_html=True)
 
@@ -1716,33 +1773,32 @@ def main():
         with dl3:
             tipos=Counter(l.get("tipo","?") for l in lancs_export)
             rel="\n".join([
-                "DOMANN CONTABILIDADE","Sistema de Integração Sigma → SCI","="*50,
-                f"Empresa  : {emp}",f"Período  : {per}",
-                      f"Gerado   : {datetime.now().strftime('%d/%m/%Y %H:%M')}",""*50,
+                "DOMANN CONTABILIDADE","Sistema de Integracao Sigma-SCI","="*50,
+                f"Empresa  : {emp}",f"Periodo  : {per}",
+                f"Gerado   : {datetime.now().strftime('%d/%m/%Y %H:%M')}","="*50,
                 f"Movs. brutos       : {stats.get('total_bruto',0):>8,}",
                 f"Pares deduplicados : {stats.get('pares',0):>8,}",
                 f"Sem par (alertas)  : {stats.get('sem_par',0):>8,}",
                 f"Exportados         : {len(lancs_export):>8,}",
                 f"  Completos (D+C)  : {len(completos_exp):>8,}",
-                f"  Pendências       : {len(pend_exp):>8,}",
-                f"Volume total       : R$ {total_val:>14,.2f}",""*50,
+                f"  Pendencias       : {len(pend_exp):>8,}",
+                f"Volume total       : R$ {total_val:>14,.2f}","="*50,
                 "TIPOS:",]+[f"  {t:<25}: {n:>6}"
                             for t,n in sorted(tipos.items(),key=lambda x:-x[1])])
-            st.download_button(" Relatório .txt",
+            st.download_button(" Relatorio .txt",
                                data=rel.encode("utf-8"),
                                file_name=f"Relatorio_{per}.txt",
                                mime="text/plain",use_container_width=True)
         st.markdown('<div class="gold-box"><strong>Formato TXT</strong>: '
                     'Windows-1252 (ANSI) · CRLF · 10 campos · '
-                    'campo 7 = complemento · campo 8 = nº doc · '
-                    'data = AAAAMMDD · natureza = D fixo</div>',
+                    'campo 7 = complemento · data = AAAAMMDD · natureza = D fixo</div>',
                     unsafe_allow_html=True)
 
-    # ── Rodapé ──────────────────────────────────────────────────────────
+    # Rodape
     st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
     st.markdown(
-        f'<div style="text-align:center;color:#94A3B8;font-size:.75rem;">'
-        f'Domann Contabilidade &nbsp;·&nbsp; Sistema Integração Sigma→SCI v3.3 &nbsp;·&nbsp; '
+        f'<div style="text-align:center;color:#7a7078;font-size:.75rem;">'
+        f'Domann Contabilidade &nbsp;·&nbsp; Sistema Integração Sigma→SCI v3.4 &nbsp;·&nbsp; '
         f'Diego Domann CRC PR-070307/O-9 &nbsp;·&nbsp; '
         f'{datetime.now().strftime("%d/%m/%Y")}</div>',
         unsafe_allow_html=True)
