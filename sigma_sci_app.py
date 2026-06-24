@@ -1,6 +1,6 @@
 """
 
-   INTEGRAÇÃO SIGMA → SCI  v3.6  — Domann Contabilidade
+   INTEGRAÇÃO SIGMA → SCI  v3.7  — Domann Contabilidade
    Auto Posto Murungava Ltda | Empresa SCI nº 29
 
    v3.6: Paleta Domann exata, Código SCI + Nome SCI editáveis com auto-preenchimento
@@ -18,25 +18,33 @@ import streamlit as st
 # 
 
 DOMANN_LOGO_SVG = (
-    '<svg viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg" width="320" height="80">'
-    # Escudo — fundo escuro
-    '<path d="M6 5 L6 50 Q6 72 36 78 Q66 72 66 50 L66 5 Z" fill="#333232"/>'
-    # Borda dourada exterior do escudo
-    '<path d="M6 5 L6 50 Q6 72 36 78 Q66 72 66 50 L66 5 Z" fill="none" stroke="#AC996F" stroke-width="2.2"/>'
-    # Borda interior (linha dupla — detalhe do logo)
-    '<path d="M10 9 L10 49 Q10 67 36 72 Q62 67 62 49 L62 9 Z" fill="none" stroke="#AC996F" stroke-width="0.8" stroke-opacity="0.55"/>'
-    # Divisória vertical central
-    '<line x1="36" y1="9" x2="36" y2="68" stroke="#AC996F" stroke-width="1" stroke-opacity="0.6"/>'
-    # Divisória horizontal central
-    '<line x1="10" y1="39" x2="62" y2="39" stroke="#AC996F" stroke-width="1" stroke-opacity="0.6"/>'
-    # Letras nos quadrantes: D O / M N
-    '<text x="23" y="30" font-family="Georgia,Times New Roman,serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle" font-style="normal">D</text>'
-    '<text x="49" y="30" font-family="Georgia,Times New Roman,serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">O</text>'
-    '<text x="23" y="62" font-family="Georgia,Times New Roman,serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">M</text>'
-    '<text x="49" y="62" font-family="Georgia,Times New Roman,serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">N</text>'
-    # Nome e subtítulo à direita
-    '<text x="80" y="38" font-family="Arial,Helvetica,sans-serif" font-size="27" font-weight="700" fill="#FFFFFF" letter-spacing="1.5">DOMANN</text>'
-    '<text x="82" y="56" font-family="Arial,Helvetica,sans-serif" font-size="9.5" fill="#AC996F" letter-spacing="4">CONTABILIDADE</text>'
+    '<svg viewBox="0 0 330 88" xmlns="http://www.w3.org/2000/svg" width="330" height="88">'
+    # Escudo principal — forma heraldica (largo no topo, ponta na base)
+    '<path d="M4 4 L4 52 C4 74 37 84 37 84 C37 84 70 74 70 52 L70 4 Z" fill="#2a2828"/>'
+    # Borda exterior dourada
+    '<path d="M4 4 L4 52 C4 74 37 84 37 84 C37 84 70 74 70 52 L70 4 Z" fill="none" stroke="url(#goldGrad)" stroke-width="2.5"/>'
+    # Borda interior (dupla — fidelidade ao logo)
+    '<path d="M9 9 L9 51 C9 69 37 78 37 78 C37 78 65 69 65 51 L65 9 Z" fill="none" stroke="#AC996F" stroke-width="0.9" stroke-opacity="0.5"/>'
+    # Fundo interno levemente mais claro para contraste das letras
+    '<path d="M11 11 L11 50 C11 66 37 75 37 75 C37 75 63 66 63 50 L63 11 Z" fill="#3a3838"/>'
+    # Linhas divisoras do grade (cruzes internas)
+    '<line x1="37" y1="11" x2="37" y2="73" stroke="#AC996F" stroke-width="1.1" stroke-opacity="0.65"/>'
+    '<line x1="11" y1="41" x2="63" y2="41" stroke="#AC996F" stroke-width="1.1" stroke-opacity="0.65"/>'
+    # Letras D O M N nos quatro quadrantes — serif elegante
+    '<text x="24" y="32" font-family="Georgia,Times New Roman,serif" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">D</text>'
+    '<text x="50" y="32" font-family="Georgia,Times New Roman,serif" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">O</text>'
+    '<text x="24" y="65" font-family="Georgia,Times New Roman,serif" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">M</text>'
+    '<text x="50" y="65" font-family="Georgia,Times New Roman,serif" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">N</text>'
+    # Degradê dourado para borda do escudo
+    '<defs><linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">'
+    '<stop offset="0%" stop-color="#C4A96A"/>'
+    '<stop offset="50%" stop-color="#AC996F"/>'
+    '<stop offset="100%" stop-color="#8B7B4C"/>'
+    '</linearGradient></defs>'
+    # Nome DOMANN à direita — Inter bold, branco
+    '<text x="86" y="44" font-family="Arial Black,Arial,Helvetica,sans-serif" font-size="30" font-weight="900" fill="#FFFFFF" letter-spacing="1">DOMANN</text>'
+    # Subtítulo CONTABILIDADE — rastreado, dourado
+    '<text x="88" y="62" font-family="Arial,Helvetica,sans-serif" font-size="9" font-weight="400" fill="#AC996F" letter-spacing="4.5">CONTABILIDADE</text>'
     '</svg>'
 )
 
@@ -83,11 +91,11 @@ h3 {{ font-size:1.15rem !important; }}
 
 /* ── Hero ── */
 .hero {{
-  background: linear-gradient(135deg, {_DOMANN_DARK} 0%, {_DOMANN_DEEP} 100%);
-  border-radius:6px; padding:1.5rem 2rem; margin-bottom:1.8rem;
-  display:flex; align-items:center; gap:1.8rem;
+  background: {_DOMANN_DARK};
+  border-radius:4px; padding:1.4rem 2rem; margin-bottom:1.8rem;
+  display:flex; align-items:center; gap:1.6rem;
   border-bottom:2px solid {_DOMANN_GOLD};
-  box-shadow: 0 6px 28px rgba(30,26,31,.38);
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
 }}
 .hero-title {{
   font-family: 'Inter', sans-serif; font-size:1.2rem; font-weight:700;
@@ -1348,15 +1356,13 @@ def main():
     st.markdown(f"""
     <div class="hero">
       {DOMANN_LOGO_SVG}
-      <div style="border-left:1px solid rgba(201,162,39,.4);
-                  padding-left:1.6rem; margin-left:.4rem;">
-        <div style="color:#fff;font-size:1.25rem;font-weight:700;
-                    letter-spacing:.5px;">
-          Sistema de Integração Contábil
+      <div style="border-left:1px solid {_DOMANN_GOLD}44;
+                  padding-left:1.8rem; margin-left:.6rem;">
+        <div style="color:#fff; font-family:'Arial Black',Arial,sans-serif;
+                    font-size:1.35rem; font-weight:900; letter-spacing:.6px;
+                    text-transform:uppercase;">
+          Sistema de Integração Contábil Postos
         </div>
-        <div class="hero-sub">Sigma → SCI &nbsp;·&nbsp; Empresa nº 29 &nbsp;·&nbsp;
-          Auto Posto Murungava Ltda</div>
-        <div class="hero-tag">v3.5 — Motor Analítico · Lock Patrimonial</div>
       </div>
     </div>""", unsafe_allow_html=True)
 
