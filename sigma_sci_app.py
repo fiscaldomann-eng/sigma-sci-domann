@@ -1,9 +1,9 @@
 """
 
-   INTEGRAÇÃO SIGMA → SCI  v3.4  — Domann Contabilidade
+   INTEGRAÇÃO SIGMA → SCI  v3.5  — Domann Contabilidade
    Auto Posto Murungava Ltda | Empresa SCI nº 29
 
-   v3.4: Identidade visual alinhada a diegodomann.com.br
+   v3.5: Badges coloridos, UI moderna sem "cara de IA"
 
 """
 
@@ -64,46 +64,47 @@ html, body, [class*="css"] {{
   background-color: {_DOMANN_CREAM};
   color: {_DOMANN_TEXT};
 }}
-.block-container {{ padding:1.2rem 2rem 2rem; max-width:1440px; }}
+.block-container {{ padding:1.2rem 2.2rem 2.5rem; max-width:1500px; }}
 h1,h2,h3 {{
   font-family: 'Playfair Display', Georgia, serif;
   color: {_DOMANN_DARK} !important;
+  margin-bottom:.5rem;
 }}
+h3 {{ font-size:1.15rem !important; }}
 
-/* ── Hero Domann ── */
+/* ── Hero ── */
 .hero {{
   background: linear-gradient(135deg, {_DOMANN_DARK} 0%, {_DOMANN_DEEP} 100%);
-  border-radius:4px; padding:1.4rem 2rem; margin-bottom:1.6rem;
+  border-radius:6px; padding:1.5rem 2rem; margin-bottom:1.8rem;
   display:flex; align-items:center; gap:1.8rem;
   border-bottom:2px solid {_DOMANN_GOLD};
-  box-shadow: 0 4px 24px rgba(30,26,31,.35);
+  box-shadow: 0 6px 28px rgba(30,26,31,.38);
 }}
 .hero-title {{
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size:1.15rem; font-weight:700;
-  color:#ffffff; letter-spacing:.3px;
+  font-family: 'Inter', sans-serif; font-size:1.2rem; font-weight:700;
+  color:#fff; letter-spacing:.3px;
 }}
 .hero-sub {{
-  color:rgba(255,255,255,.55); font-size:.78rem; margin:.25rem 0 0;
-  letter-spacing:.4px; font-family:'Inter', sans-serif;
+  color:rgba(255,255,255,.5); font-size:.78rem;
+  margin:.2rem 0 0; letter-spacing:.4px;
 }}
 .hero-tag {{
   display:inline-block; background:{_DOMANN_GOLD}22;
-  border:1px solid {_DOMANN_GOLD}88; border-radius:4px;
-  padding:3px 10px; font-size:.68rem; color:{_DOMANN_GOLD}; margin-top:.6rem;
-  letter-spacing:1px; text-transform:uppercase; font-weight:600;
-  font-family:'Inter', sans-serif;
+  border:1px solid {_DOMANN_GOLD}88; border-radius:20px;
+  padding:3px 12px; font-size:.67rem; color:{_DOMANN_GOLD};
+  margin-top:.65rem; letter-spacing:1px; text-transform:uppercase;
+  font-weight:700;
 }}
 
 /* ── Tabs ── */
 .stTabs [data-baseweb="tab-list"] {{
-  background:#eeebe4; padding:3px; border-radius:4px; gap:2px;
+  background:#eeebe4; padding:3px; border-radius:5px; gap:2px;
   border:1px solid {_DOMANN_BORDER};
 }}
 .stTabs [data-baseweb="tab"] {{
-  border-radius:3px; padding:.45rem 1.1rem; font-weight:600;
-  font-size:.85rem; color:{_DOMANN_MUTED}; border:none !important;
-  font-family:'Inter', sans-serif;
+  border-radius:4px; padding:.45rem 1.2rem; font-weight:600;
+  font-size:.84rem; color:{_DOMANN_MUTED}; border:none !important;
+  transition:background .12s;
 }}
 .stTabs [aria-selected="true"] {{
   background:{_DOMANN_DARK} !important; color:#fff !important;
@@ -111,99 +112,171 @@ h1,h2,h3 {{
 
 /* ── Metric cards ── */
 .metric-card {{
-  background:#ffffff; border:1px solid {_DOMANN_BORDER}; border-radius:4px;
-  padding:1rem 1.2rem; text-align:center;
-  box-shadow:0 1px 4px rgba(50,45,51,.06);
+  background:#fff; border:1px solid {_DOMANN_BORDER}; border-radius:6px;
+  padding:1.1rem 1.2rem; text-align:center;
+  box-shadow:0 1px 6px rgba(50,45,51,.07);
+  transition:box-shadow .15s;
 }}
-.metric-value {{ font-size:1.9rem; font-weight:700; color:{_DOMANN_DARK}; font-family:'Inter', sans-serif; }}
-.metric-label {{ font-size:.72rem; color:{_DOMANN_MUTED}; margin-top:3px; text-transform:uppercase; letter-spacing:.6px; }}
+.metric-card:hover {{ box-shadow:0 4px 14px rgba(50,45,51,.13); }}
+.metric-value {{ font-size:1.85rem; font-weight:700; color:{_DOMANN_DARK}; line-height:1.1; }}
+.metric-label {{ font-size:.7rem; color:{_DOMANN_MUTED}; margin-top:4px; text-transform:uppercase; letter-spacing:.7px; }}
 .metric-card-gold {{
-  background:{_DOMANN_CREAM}; border:1px solid {_DOMANN_GOLD}55;
-  border-radius:4px; padding:1rem 1.2rem; text-align:center;
-  box-shadow:0 1px 4px rgba(50,45,51,.06);
+  background:linear-gradient(135deg,{_DOMANN_CREAM} 0%,#f0ead9 100%);
+  border:1px solid {_DOMANN_GOLD}55; border-radius:6px;
+  padding:1.1rem 1.2rem; text-align:center;
+  box-shadow:0 1px 6px rgba(184,150,90,.1);
+  transition:box-shadow .15s;
 }}
-.metric-value-gold {{ font-size:1.9rem; font-weight:700; color:{_DOMANN_GOLD}; font-family:'Inter', sans-serif; }}
+.metric-card-gold:hover {{ box-shadow:0 4px 14px rgba(184,150,90,.2); }}
+.metric-value-gold {{ font-size:1.85rem; font-weight:700; color:{_DOMANN_GOLD}; line-height:1.1; }}
 
-/* ── Info boxes ── */
-.info-box {{ background:#EFF6FF; border-left:3px solid #3B82F6;
-            padding:.75rem 1rem; border-radius:0 4px 4px 0; font-size:.85rem; margin:.5rem 0; }}
-.warn-box {{ background:#FFFBEB; border-left:3px solid #F59E0B;
-            padding:.75rem 1rem; border-radius:0 4px 4px 0; font-size:.85rem; margin:.5rem 0; }}
-.ok-box   {{ background:#F0FDF4; border-left:3px solid #22C55E;
-            padding:.75rem 1rem; border-radius:0 4px 4px 0; font-size:.85rem; margin:.5rem 0; }}
-.gold-box {{ background:{_DOMANN_GOLD}0D; border-left:3px solid {_DOMANN_GOLD};
-            padding:.75rem 1rem; border-radius:0 4px 4px 0; font-size:.85rem; margin:.5rem 0; }}
-.pend-card {{ background:#fffef7; border:1px solid #e0c96a; border-radius:4px;
-              padding:.9rem 1rem; margin:.4rem 0; }}
-.alt-card  {{ background:#ffffff; border:1px solid {_DOMANN_BORDER};
-              border-radius:4px; padding:.9rem 1rem; margin:.4rem 0; }}
+/* ── Status badges (para renderização HTML inline) ── */
+.sbadge {{
+  display:inline-flex; align-items:center; gap:5px; padding:4px 11px;
+  border-radius:20px; font-size:.73rem; font-weight:700;
+  letter-spacing:.2px; white-space:nowrap; line-height:1;
+}}
+.sbadge::before {{ content:""; display:inline-block; width:6px; height:6px; border-radius:50%; }}
+.s-ok    {{ background:#dcfce7; color:#15803d; }} .s-ok::before    {{ background:#15803d; }}
+.s-auto  {{ background:#dbeafe; color:#1d4ed8; }} .s-auto::before  {{ background:#1d4ed8; }}
+.s-sug   {{ background:#fef9c3; color:#a16207; }} .s-sug::before   {{ background:#a16207; }}
+.s-low   {{ background:#ffedd5; color:#c2410c; }} .s-low::before   {{ background:#c2410c; }}
+.s-pend  {{ background:#fee2e2; color:#b91c1c; }} .s-pend::before  {{ background:#b91c1c; }}
+.s-excl  {{ background:#f1f5f9; color:#64748b; }} .s-excl::before  {{ background:#64748b; }}
 
-/* ── Botões ── */
+/* ── Info / status boxes ── */
+.info-box {{
+  background:#eff6ff; border-left:3px solid #3b82f6;
+  padding:.75rem 1rem; border-radius:0 6px 6px 0;
+  font-size:.84rem; margin:.5rem 0; color:#1e40af;
+}}
+.warn-box {{
+  background:#fffbeb; border-left:3px solid #f59e0b;
+  padding:.75rem 1rem; border-radius:0 6px 6px 0;
+  font-size:.84rem; margin:.5rem 0; color:#78350f;
+}}
+.ok-box {{
+  background:#f0fdf4; border-left:3px solid #22c55e;
+  padding:.75rem 1rem; border-radius:0 6px 6px 0;
+  font-size:.84rem; margin:.5rem 0; color:#14532d;
+}}
+.gold-box {{
+  background:{_DOMANN_GOLD}0D; border-left:3px solid {_DOMANN_GOLD};
+  padding:.75rem 1rem; border-radius:0 6px 6px 0;
+  font-size:.84rem; margin:.5rem 0; color:{_DOMANN_TEXT};
+}}
+.pend-card {{
+  background:#fffef7; border:1px solid #d9c46a; border-radius:6px;
+  padding:.9rem 1rem; margin:.45rem 0;
+}}
+.alt-card {{
+  background:#fdfdfc; border:1px solid {_DOMANN_BORDER};
+  border-radius:6px; padding:.9rem 1rem; margin:.45rem 0;
+}}
+
+/* ── Botão principal (ouro) ── */
 .stButton>button {{
   background:{_DOMANN_GOLD}; color:{_DOMANN_DEEP};
-  border:none; border-radius:4px; font-weight:600;
-  padding:.5rem 1.6rem; letter-spacing:.3px;
-  font-family:'Inter', sans-serif;
-  transition:background .15s ease;
+  border:none; border-radius:5px; font-weight:600;
+  padding:.52rem 1.8rem; letter-spacing:.2px;
+  font-family:'Inter', sans-serif; font-size:.875rem;
+  transition:all .15s ease; box-shadow:0 1px 4px rgba(184,150,90,.25);
 }}
 .stButton>button:hover {{
   background:{_DOMANN_GOLD_L} !important; color:{_DOMANN_DEEP} !important;
+  box-shadow:0 3px 10px rgba(184,150,90,.35) !important;
+  transform:translateY(-1px);
 }}
+.stButton>button:active {{ transform:translateY(0); }}
 .stButton>button[kind="secondary"] {{
-  background:transparent; color:{_DOMANN_DARK};
-  border:1px solid {_DOMANN_BORDER};
+  background:#fff; color:{_DOMANN_DARK};
+  border:1px solid {_DOMANN_BORDER}; box-shadow:none;
 }}
 .stButton>button[kind="secondary"]:hover {{
-  background:{_DOMANN_CREAM} !important; color:{_DOMANN_DARK} !important;
-  border-color:{_DOMANN_GOLD} !important;
+  background:{_DOMANN_CREAM} !important; border-color:{_DOMANN_GOLD} !important;
+  color:{_DOMANN_DARK} !important; transform:none;
 }}
 
 /* ── Download button ── */
 .stDownloadButton>button {{
   background:{_DOMANN_DARK}; color:#fff;
-  border:1px solid {_DOMANN_GOLD}55; border-radius:4px;
-  font-weight:600; font-family:'Inter', sans-serif;
+  border:1px solid {_DOMANN_GOLD}44; border-radius:5px;
+  font-weight:600; font-size:.875rem;
+  transition:all .15s ease;
 }}
 .stDownloadButton>button:hover {{
-  background:{_DOMANN_DEEP} !important; border-color:{_DOMANN_GOLD} !important;
+  background:{_DOMANN_DEEP} !important;
+  border-color:{_DOMANN_GOLD}99 !important;
+  box-shadow:0 3px 10px rgba(30,26,31,.3) !important;
+  transform:translateY(-1px);
 }}
 
-/* ── Divisor dourado ── */
+/* ── Divisor ouro ── */
 .gold-divider {{
   height:1px;
-  background:linear-gradient(90deg,transparent,{_DOMANN_GOLD}66,transparent);
-  margin:1.4rem 0; border:none;
+  background:linear-gradient(90deg,transparent,{_DOMANN_GOLD}55,transparent);
+  margin:1.5rem 0; border:none;
 }}
 
-/* ── Tabela ── */
+/* ── Tabela / dataframe ── */
 .dataframe thead th {{
   background:{_DOMANN_DARK} !important; color:#fff !important;
-  font-size:.82rem; font-weight:600; font-family:'Inter', sans-serif;
+  font-size:.81rem; font-weight:600; padding:.55rem .75rem !important;
 }}
-.dataframe tbody tr:nth-child(even) {{ background:{_DOMANN_CREAM}; }}
+.dataframe tbody tr:nth-child(even) {{ background:#f8f6f1; }}
+.dataframe tbody td {{ font-size:.82rem; padding:.42rem .65rem !important; }}
 
 /* ── Inputs ── */
-.stTextInput>div>div>input, .stTextArea>div>div>textarea {{
-  border:1px solid {_DOMANN_BORDER}; border-radius:4px;
-  font-family:'Inter', sans-serif; color:{_DOMANN_TEXT};
-  background:#ffffff;
+.stTextInput>div>div>input,
+.stTextArea>div>div>textarea {{
+  border:1px solid {_DOMANN_BORDER}; border-radius:5px;
+  font-family:'Inter', sans-serif; font-size:.875rem;
+  color:{_DOMANN_TEXT}; background:#fff;
+  transition:border-color .15s;
+}}
+.stTextInput>div>div>input:focus,
+.stTextArea>div>div>textarea:focus {{
+  border-color:{_DOMANN_GOLD}88 !important;
+  box-shadow:0 0 0 2px {_DOMANN_GOLD}22 !important;
 }}
 .stSelectbox>div>div {{
-  border:1px solid {_DOMANN_BORDER}; border-radius:4px;
+  border:1px solid {_DOMANN_BORDER}; border-radius:5px;
 }}
 
 /* ── File uploader ── */
-.stFileUploader {{
-  border:1px dashed {_DOMANN_GOLD}66 !important;
-  border-radius:4px; background:{_DOMANN_CREAM};
+[data-testid="stFileUploadDropzone"] {{
+  border:2px dashed {_DOMANN_GOLD}55 !important;
+  border-radius:6px !important; background:{_DOMANN_CREAM} !important;
+  transition:border-color .15s;
+}}
+[data-testid="stFileUploadDropzone"]:hover {{
+  border-color:{_DOMANN_GOLD}aa !important;
 }}
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {{
   background:{_DOMANN_DARK};
-  border-right:1px solid {_DOMANN_GOLD}33;
+  border-right:1px solid {_DOMANN_GOLD}22;
 }}
-[data-testid="stSidebar"] * {{ color:#ffffff !important; font-family:'Inter',sans-serif; }}
+[data-testid="stSidebar"] * {{
+  color:#e8e4df !important; font-family:'Inter',sans-serif;
+}}
+[data-testid="stSidebar"] h3, [data-testid="stSidebar"] strong {{
+  color:#fff !important;
+}}
+
+/* ── Expander ── */
+[data-testid="stExpander"] {{
+  border:1px solid {_DOMANN_BORDER} !important; border-radius:6px !important;
+}}
+[data-testid="stExpander"] summary {{
+  font-weight:600; font-size:.875rem; color:{_DOMANN_DARK};
+}}
+
+/* ── Progress (conf %) na tabela ── */
+[data-testid="stProgress"] > div {{
+  background:{_DOMANN_GOLD} !important;
+}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -832,9 +905,9 @@ def build_depara_with_matches(accounts, sci_plan, persistent, extra) -> list[dic
         if candidates: auto_code,auto_name,auto_score,auto_method = candidates[0]
 
         if excluir or sci_code == "EXCLUIR":
-            status, conf = "[X] Excluído", 1.0
+            status, conf = "Excluído", 1.0
         elif sci_code and source in ("base","salvo","base-prefix","sessão"):
-            status, conf = "[OK] Confirmado", 1.0
+            status, conf = "Confirmado", 1.0
         elif auto_score >= 0.88:
             status, conf = "Auto-match", auto_score
             if not sci_code: sci_code,sci_name = auto_code,auto_name
@@ -845,7 +918,7 @@ def build_depara_with_matches(accounts, sci_plan, persistent, extra) -> list[dic
             status, conf = "Baixa conf.", auto_score
             if not sci_code: sci_code,sci_name = auto_code,auto_name
         else:
-            status, conf = "[?] Pendente", 0.0
+            status, conf = "Pendente", 0.0
 
         rows.append({
             "sigma_code":  nc,
@@ -1210,6 +1283,53 @@ def metric_card(label: str, value: str, col, gold: bool = False):
           <div class="metric-label">{label}</div></div>""", unsafe_allow_html=True)
 
 
+# Mapeamento de status → classe CSS do badge
+_STATUS_CSS = {
+    "Confirmado":  "s-ok",
+    "Auto-match":  "s-auto",
+    "Sugerido":    "s-sug",
+    "Baixa conf.": "s-low",
+    "Pendente":    "s-pend",
+    "Excluído":    "s-excl",
+}
+_STATUS_LABEL = {
+    "Confirmado":  "Confirmado",
+    "Auto-match":  "Auto-match",
+    "Sugerido":    "Sugerido",
+    "Baixa conf.": "Baixa conf.",
+    "Pendente":    "Pendente",
+    "Excluído":    "Excluído",
+}
+
+
+def badge_html(status: str) -> str:
+    css = _STATUS_CSS.get(status, "s-excl")
+    label = _STATUS_LABEL.get(status, status)
+    return f'<span class="sbadge {css}">{label}</span>'
+
+
+def _style_status_df(df):
+    """Aplica cores de fundo na coluna Status via pandas Styler."""
+    COLORS = {
+        "Confirmado":  ("#bbf7d0", "#14532d"),
+        "Auto-match":  ("#bfdbfe", "#1e3a8a"),
+        "Sugerido":    ("#fef08a", "#713f12"),
+        "Baixa conf.": ("#fed7aa", "#7c2d12"),
+        "Pendente":    ("#fecaca", "#7f1d1d"),
+        "Excluído":    ("#e2e8f0", "#475569"),
+    }
+    def _sty(val):
+        if val in COLORS:
+            bg, fg = COLORS[val]
+            return (f"background-color:{bg};color:{fg};"
+                    f"font-weight:700;border-radius:4px;padding:2px 6px")
+        return ""
+    cols_exist = [c for c in ["Status"] if c in df.columns]
+    if cols_exist:
+        return df.style.applymap(_sty, subset=cols_exist)
+    return df.style
+
+
 # 
 # INTERFACE PRINCIPAL
 # 
@@ -1227,19 +1347,18 @@ def main():
         </div>
         <div class="hero-sub">Sigma → SCI &nbsp;·&nbsp; Empresa nº 29 &nbsp;·&nbsp;
           Auto Posto Murungava Ltda</div>
-        <div class="hero-tag">v3.4 — Motor Analítico com Lock Patrimonial</div>
+        <div class="hero-tag">v3.5 — Motor Analítico · Lock Patrimonial</div>
       </div>
     </div>""", unsafe_allow_html=True)
 
     #  Sidebar 
     with st.sidebar:
-        st.markdown(f"### Configurações")
+        st.markdown("### Configurações")
         empresa_nome = st.text_input("Empresa", value="Auto Posto Murungava Ltda")
-        periodo = st.text_input("Período (AAAАММ)",
-                                value=datetime.now().strftime("%Y%m"))
+        periodo = st.text_input("Período (AAAAMM)", value=datetime.now().strftime("%Y%m"))
         st.divider()
         pers = load_persistent()
-        st.caption(f"**{len(pers)}** mapeamentos confirmados")
+        st.caption(f"{len(pers)} mapeamentos confirmados em cache")
 
         # Exportar mapeamentos (essencial na nuvem) 
         if pers:
@@ -1261,28 +1380,28 @@ def main():
             try:
                 imported = json.load(imp)
                 save_persistent(imported)
-                st.success(f"[OK] {len(imported)} mapeamentos importados!")
+                st.success(f"{len(imported)} mapeamentos importados com sucesso.")
                 st.rerun()
             except Exception as ex:
-                st.error(f"Erro ao importar: {ex}")
+                st.error(f"Erro ao importar o arquivo: {ex}")
 
-        if st.button("Limpar cache", use_container_width=True):
+        if st.button("Limpar sessão", use_container_width=True):
             for k in ["accounts","sci_plan","depara_rows","lancamentos",
                       "stats_dedup","alertas_dedup","alertas_regras"]:
                 st.session_state.pop(k,None)
             st.rerun()
         st.divider()
-        fe = st.text_area("Funcionários extras (maiúsculas):", height=60)
+        fe = st.text_area("Funcionários adicionais (maiúsculas):", height=60)
         if fe.strip():
             for fn in fe.strip().upper().splitlines():
                 fn=fn.strip()
                 if fn: FUNCIONARIOS_REG.add(fn)
 
     tab1, tab2, tab3, tab4 = st.tabs([
-        "1 · Carregar Arquivos",
-        "2 · DE/PARA & Mapeamentos",
-        "3 · Processamento",
-        "4 · Exportar",
+        "Carregar Arquivos",
+        "DE/PARA & Mapeamentos",
+        "Processamento",
+        "Exportar",
     ])
 
     # 
@@ -1296,12 +1415,12 @@ def main():
                     unsafe_allow_html=True)
         c1,c2 = st.columns(2)
         with c1:
-            f_mov = st.file_uploader(" Movimentação Sigma *",
+            f_mov = st.file_uploader("Movimentação Sigma *",
                                      type=["xls","xlsx","html","htm","xml","csv"],key="up_mov")
         with c2:
-            f_plano = st.file_uploader(" Plano de Contas SCI",
+            f_plano = st.file_uploader("Plano de Contas SCI (opcional)",
                                        type=["csv","xlsx","txt"],key="up_plano")
-        extra_raw = st.text_area(" Mapeamentos manuais (sigma_code=sci_code):",
+        extra_raw = st.text_area("Mapeamentos manuais (sigma_code=sci_code):",
                                  placeholder="1.1.2.99=494099\n2.1.6.15=494100",height=60)
         extra_de_para: dict[str,str] = {}
         for line in extra_raw.strip().splitlines():
@@ -1309,17 +1428,17 @@ def main():
                 k,v=line.split("=",1); extra_de_para[k.strip()]=v.strip()
 
         st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
-        btn_load = st.button(" Analisar Arquivos",type="primary",use_container_width=True)
+        btn_load = st.button("Analisar Arquivos", type="primary", use_container_width=True)
 
         if btn_load:
-            if not f_mov: st.error("[!] Carregue a Movimentação Sigma."); st.stop()
+            if not f_mov: st.error("Carregue a Movimentação Sigma antes de continuar."); st.stop()
             sci_plan: dict[str,str] = {}
             if f_plano:
                 with st.spinner("Lendo Plano de Contas SCI..."):
                     try: sci_plan = parse_sci_plan(f_plano.read(), f_plano.name)
                     except Exception as ex: st.warning(f"Erro SCI: {ex}")
-                if sci_plan: st.success(f"[OK] Plano SCI: **{len(sci_plan)}** contas.")
-                else: st.warning("[!] Plano SCI não lido — matching limitado ao DE/PARA base.")
+                if sci_plan: st.success(f"Plano de contas SCI carregado: {len(sci_plan)} contas.")
+                else: st.warning("Plano SCI não lido — o matching usará apenas o DE/PARA base.")
             with st.spinner(f"Lendo movimentação ({f_mov.name})..."):
                 mov_bytes = f_mov.read()
                 fmt_det   = _detect_format(mov_bytes, f_mov.name)
@@ -1329,7 +1448,7 @@ def main():
                     st.code(f"Formato: {fmt_det} | {len(mov_bytes):,} bytes\n{mov_bytes[:300]}")
                     st.stop()
             if not accounts:
-                st.error("[X] Não foi possível ler a movimentação.")
+                st.error("Não foi possível ler a movimentação. Verifique o formato do arquivo.")
                 try: sample=mov_bytes[:600].decode("windows-1252",errors="replace")
                 except Exception: sample=str(mov_bytes[:300])
                 st.code(sample); st.stop()
@@ -1353,7 +1472,7 @@ def main():
             metric_card("Movimentos",    f"{n_movs:,}",         cc[1])
             metric_card("Volume bruto",  f"R$ {total_val:,.0f}",cc[2], gold=True)
             metric_card("Contas SCI",    f"{len(sci_plan)}",    cc[3])
-            with st.expander(" Prévia das contas Sigma"):
+            with st.expander("Prévia das contas Sigma"):
                 import pandas as pd
                 df = pd.DataFrame([{
                     "Código":get_sigma_code(k),"Classe":detect_class_sigma(get_sigma_code(k)),
@@ -1375,12 +1494,11 @@ def main():
         extra_map  = st.session_state.get("extra_depara",{})
         persistent = load_persistent()
 
-        st.markdown("###  Mapeamento DE/PARA — Sigma → SCI")
+        st.markdown("### Mapeamento DE/PARA — Sigma → SCI")
         st.markdown(
-            '<div class="gold-box"> <strong>Lock Patrimonial</strong>: '
-            'o motor só cruza contas da mesma classe (Ativo↔Ativo, Passivo↔Passivo). '
-            'Use a seção <em>Alterar Sugestão</em> para corrigir sugestões erradas, '
-            'e a seção <em>Resolver Pendências</em> para contas sem mapeamento.</div>',
+            '<div class="gold-box"><strong>Lock Patrimonial ativo</strong>: '
+            'o motor cruza apenas contas da mesma classe (Ativo↔Ativo, Passivo↔Passivo). '
+            'Revise as sugestões automáticas abaixo e confirme ou corrija antes de processar.</div>',
             unsafe_allow_html=True)
 
         if "depara_rows" not in st.session_state:
@@ -1390,30 +1508,32 @@ def main():
         else:
             rows = st.session_state.depara_rows
 
-        n_conf = sum(1 for r in rows if "[OK]" in r["status"])
-        n_auto = sum(1 for r in rows if "" in r["status"])
-        n_sug  = sum(1 for r in rows if "" in r["status"])
-        n_pend = sum(1 for r in rows if "[?]" in r["status"])
-        n_ex   = sum(1 for r in rows if "[X]" in r["status"])
+        n_conf = sum(1 for r in rows if r["status"] == "Confirmado")
+        n_auto = sum(1 for r in rows if r["status"] == "Auto-match")
+        n_sug  = sum(1 for r in rows if r["status"] == "Sugerido")
+        n_low  = sum(1 for r in rows if r["status"] == "Baixa conf.")
+        n_pend = sum(1 for r in rows if r["status"] == "Pendente")
+        n_ex   = sum(1 for r in rows if r["status"] == "Excluído")
 
-        sc1,sc2,sc3,sc4,sc5 = st.columns(5)
-        metric_card("Confirmados",str(n_conf),sc1,gold=True)
-        metric_card("Auto-match", str(n_auto),sc2)
-        metric_card("Sugeridos",  str(n_sug), sc3)
-        metric_card("Pendentes",  str(n_pend),sc4)
-        metric_card("Excluídos",  str(n_ex),  sc5)
+        sc1,sc2,sc3,sc4,sc5,sc6 = st.columns(6)
+        metric_card("Confirmados", str(n_conf), sc1, gold=True)
+        metric_card("Auto-match",  str(n_auto), sc2)
+        metric_card("Sugeridos",   str(n_sug),  sc3)
+        metric_card("Baixa conf.", str(n_low),  sc4)
+        metric_card("Pendentes",   str(n_pend), sc5)
+        metric_card("Excluídos",   str(n_ex),   sc6)
 
         # Filtros
         cf1,cf2 = st.columns([3,2])
         with cf1:
             filtro_status = st.multiselect(
-                "Filtrar:",
-                ["[OK] Confirmado","Auto-match","Sugerido","Baixa conf.",
-                 "[?] Pendente","[X] Excluído"],
-                default=["[OK] Confirmado","Auto-match","Sugerido","Baixa conf.","[?] Pendente"],
+                "Filtrar por status:",
+                ["Confirmado","Auto-match","Sugerido","Baixa conf.","Pendente","Excluído"],
+                default=["Confirmado","Auto-match","Sugerido","Baixa conf.","Pendente"],
                 label_visibility="collapsed")
         with cf2:
-            busca = st.text_input("", value="", placeholder="Buscar conta...", label_visibility="collapsed")
+            busca = st.text_input("", value="", placeholder="Buscar por código ou nome...",
+                                  label_visibility="collapsed")
 
         rows_filt = [r for r in rows if not filtro_status or r["status"] in filtro_status]
         if busca and busca != "placeholder":
@@ -1423,46 +1543,71 @@ def main():
                        or bq in (r.get("sci_code") or "").lower()
                        or bq in (r.get("sci_name") or "").lower()]
 
-        #  Tabela principal 
+        # ─── Tabela principal: overview colorido (read-only) ────────────────
         import pandas as pd
-        df_show = pd.DataFrame([{
-            "Status":          r["status"],
-            "Cód. Sigma":      r["sigma_code"],
-            "Nome Sigma":      r["sigma_name"],
-            "Classe":          r["sigma_class"],
-            "Movs.":           r["n_movs"],
-            "Total R$":        r["total_rs"],
-            "Código SCI ":   r["sci_code"],
-            "Nome SCI":        r["sci_name"],
-            "Conf. %":         int(r["confidence"]*100),
-            "Método":          r["method"],
+        df_overview = pd.DataFrame([{
+            "Status":      r["status"],
+            "Cód. Sigma":  r["sigma_code"],
+            "Nome Sigma":  r["sigma_name"],
+            "Classe":      r["sigma_class"],
+            "Movs.":       r["n_movs"],
+            "Total R$":    r["total_rs"],
+            "Cód. SCI":    r["sci_code"],
+            "Nome SCI":    r["sci_name"],
+            "Conf. %":     int(r["confidence"]*100),
+            "Método":      r["method"],
+        } for r in rows_filt])
+
+        st.dataframe(
+            _style_status_df(df_overview),
+            column_config={
+                "Status":     st.column_config.TextColumn("Status",      width="small"),
+                "Cód. Sigma": st.column_config.TextColumn("Cód. Sigma",  width="small"),
+                "Nome Sigma": st.column_config.TextColumn("Nome Sigma",  width="medium"),
+                "Classe":     st.column_config.TextColumn("Classe",      width="small"),
+                "Movs.":      st.column_config.NumberColumn("Movs.",     width="small"),
+                "Total R$":   st.column_config.NumberColumn("Total R$",  format="R$ %.2f"),
+                "Cód. SCI":   st.column_config.TextColumn("Cód. SCI",   width="small"),
+                "Nome SCI":   st.column_config.TextColumn("Nome SCI",   width="large"),
+                "Conf. %":    st.column_config.ProgressColumn("Conf.", min_value=0, max_value=100, width="small"),
+                "Método":     st.column_config.TextColumn("Método",     width="small"),
+            },
+            use_container_width=True, hide_index=True)
+
+        # ─── Edição inline de códigos SCI ────────────────────────────────────
+        st.markdown('<div class="info-box" style="margin-top:.8rem">Para corrigir o '
+                    '<strong>Código SCI</strong> de qualquer conta, edite diretamente '
+                    'a coluna abaixo e clique em <strong>Salvar</strong>.</div>',
+                    unsafe_allow_html=True)
+
+        df_edit = pd.DataFrame([{
+            "Cód. Sigma":  r["sigma_code"],
+            "Nome Sigma":  r["sigma_name"],
+            "Classe":      r["sigma_class"],
+            "Código SCI ": r["sci_code"],
+            "Nome SCI":    r["sci_name"],
         } for r in rows_filt])
 
         edited = st.data_editor(
-            df_show,
+            df_edit,
             column_config={
-                "Status":        st.column_config.TextColumn("Status",width="small",disabled=True),
-                "Cód. Sigma":    st.column_config.TextColumn("Cód. Sigma",width="small",disabled=True),
-                "Nome Sigma":    st.column_config.TextColumn("Nome Sigma",width="medium",disabled=True),
-                "Classe":        st.column_config.TextColumn("Classe",width="small",disabled=True),
-                "Movs.":         st.column_config.NumberColumn("Movs.",width="small",disabled=True),
-                "Total R$":      st.column_config.NumberColumn("Total R$",format="R$ %.2f",disabled=True),
-                "Código SCI ": st.column_config.TextColumn("Cód. SCI ",width="small",
-                                     help="Digite o código SCI diretamente"),
-                "Nome SCI":      st.column_config.TextColumn("Nome SCI (auto)",width="large",disabled=True),
-                "Conf. %":       st.column_config.ProgressColumn("Conf.",min_value=0,max_value=100,width="small"),
-                "Método":        st.column_config.TextColumn("Método",width="small",disabled=True),
+                "Cód. Sigma":  st.column_config.TextColumn("Cód. Sigma", width="small",  disabled=True),
+                "Nome Sigma":  st.column_config.TextColumn("Nome Sigma", width="medium", disabled=True),
+                "Classe":      st.column_config.TextColumn("Classe",     width="small",  disabled=True),
+                "Código SCI ": st.column_config.TextColumn("Código SCI",width="small",
+                                   help="Edite o código SCI aqui — pressione Enter para confirmar"),
+                "Nome SCI":    st.column_config.TextColumn("Nome SCI (auto)", width="large", disabled=True),
             },
             use_container_width=True, hide_index=True, num_rows="fixed",
             key="depara_editor")
 
         cs1,cs2 = st.columns([1,3])
         with cs1:
-            btn_save = st.button(" Salvar Mapeamentos",type="primary",use_container_width=True)
+            btn_save = st.button("Salvar Mapeamentos", type="primary", use_container_width=True)
         with cs2:
-            st.markdown('<div class="ok-box" style="margin:0">Grava em '
+            st.markdown('<div class="ok-box" style="margin:0">Salvo em '
                         '<code>de_para_confirmado.json</code> — '
-                        'aplicado automaticamente nos próximos meses.</div>',
+                        'aplicado automaticamente nos próximos períodos.</div>',
                         unsafe_allow_html=True)
         if btn_save:
             to_save: dict[str,str] = {}
@@ -1480,10 +1625,10 @@ def main():
                 ec=edit_map.get(r["sigma_code"],"")
                 if ec and ec not in ("nan",""):
                     nr["sci_code"]=ec; nr["sci_name"]=sci_plan.get(ec,"")
-                    nr["status"]="[OK] Confirmado"; nr["confidence"]=1.0
+                    nr["status"]="Confirmado"; nr["confidence"]=1.0
                 new_rows.append(nr)
             st.session_state.depara_rows=new_rows
-            st.success(f"[OK] {len(to_save)} mapeamentos salvos.")
+            st.success(f"{len(to_save)} mapeamentos salvos com sucesso.")
 
         #  SEÇÃO: ALTERAR SUGESTÃO (para corrigir sugestões erradas) 
         st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
@@ -1493,13 +1638,13 @@ def main():
 
         if altera_rows:
             with st.expander(
-                f" Alterar Sugestão Automática — {len(altera_rows)} contas disponíveis",
+                f"Corrigir Sugestão Automática — {len(altera_rows)} contas disponíveis",
                 expanded=(n_auto+n_sug > 0 and n_pend == 0)):
                 st.markdown(
-                    '<div class="warn-box">[!] O sistema sugeriu automaticamente as contas '
-                    'abaixo. Se alguma estiver <strong>errada</strong>, selecione a conta '
-                    'correta (filtrada pela classe patrimonial) e clique em '
-                    '<strong>Aplicar</strong>.</div>',
+                    '<div class="warn-box">O sistema sugeriu automaticamente as contas '
+                    'abaixo. Verifique se a conta SCI está correta. '
+                    'Se não estiver, selecione a conta correta e clique em '
+                    '<strong>Confirmar</strong>.</div>',
                     unsafe_allow_html=True)
 
                 sci_by_class: dict[str,list] = defaultdict(list)
@@ -1554,14 +1699,14 @@ def main():
                                        "  |  ".join(f"`{c}` {n[:25]} ({int(s*100)}%)"
                                                     for c,n,s,_ in cands[:5]))
                     with col_b:
-                        if st.button("[OK] Aplicar", key=f"btn_alt_{r['sigma_code']}",
+                        if st.button("Confirmar", key=f"btn_alt_{r['sigma_code']}",
                                      use_container_width=True):
                             if sel not in ("— manter atual —",""):
                                 code_sel = sel.split(" — ")[0].strip() if " — " in sel else sel.strip()
                                 if code_sel:
                                     save_persistent({r["sigma_code"]: code_sel})
                                     confirmed_changes[r["sigma_code"]] = code_sel
-                                    st.success(f"Salvo: {r['sigma_code']} → {code_sel}")
+                                    st.success(f"Mapeamento salvo: {r['sigma_code']} → {code_sel}")
 
                 if confirmed_changes:
                     new_rows=[]
@@ -1570,18 +1715,18 @@ def main():
                         if r["sigma_code"] in confirmed_changes:
                             nr["sci_code"]=confirmed_changes[r["sigma_code"]]
                             nr["sci_name"]=sci_plan.get(nr["sci_code"],"")
-                            nr["status"]="[OK] Confirmado"; nr["confidence"]=1.0
+                            nr["status"]="Confirmado"; nr["confidence"]=1.0
                         new_rows.append(nr)
                     st.session_state.depara_rows=new_rows
 
-        #  SEÇÃO: RESOLVER PENDÊNCIAS 
-        pendentes = [r for r in rows if "[?]" in r["status"]]
+        # ─── SEÇÃO: RESOLVER PENDÊNCIAS ──────────────────────────────────────
+        pendentes = [r for r in rows if r["status"] == "Pendente"]
         if pendentes:
             st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
-            with st.expander(f"[?] Resolver Pendências — {len(pendentes)} contas sem mapeamento"):
+            with st.expander(f"Resolver Pendências — {len(pendentes)} contas sem mapeamento"):
                 st.markdown(
-                    '<div class="warn-box">Contas Sigma sem correspondência no DE/PARA. '
-                    'Selecione a conta SCI correta e confirme.</div>',
+                    '<div class="warn-box">Contas Sigma sem correspondência no DE/PARA base. '
+                    'Selecione a conta SCI equivalente e confirme para cada uma.</div>',
                     unsafe_allow_html=True)
                 if not sci_plan:
                     st.info("Carregue o Plano de Contas SCI na aba 1 para ativar a busca.")
@@ -1615,13 +1760,13 @@ def main():
                                 index=pre_idx,
                                 key=f"pend_{r['sigma_code']}")
                         with pcb:
-                            if st.button("[OK]",key=f"btn_pend_{r['sigma_code']}",
+                            if st.button("Confirmar", key=f"btn_pend_{r['sigma_code']}",
                                          use_container_width=True):
                                 if sel_p != "— Selecione —":
                                     code_sel=sel_p.split(" — ")[0].strip()
                                     save_persistent({r["sigma_code"]:code_sel})
                                     confirmed_pend[r["sigma_code"]]=code_sel
-                                    st.success(f"[OK] {r['sigma_code']} → {code_sel}")
+                                    st.success(f"{r['sigma_code']} → {code_sel}")
                     if confirmed_pend:
                         new_rows=[]
                         for r in st.session_state.depara_rows:
@@ -1629,7 +1774,7 @@ def main():
                             if r["sigma_code"] in confirmed_pend:
                                 nr["sci_code"]=confirmed_pend[r["sigma_code"]]
                                 nr["sci_name"]=sci_plan.get(nr["sci_code"],"")
-                                nr["status"]="[OK] Confirmado"; nr["confidence"]=1.0
+                                nr["status"]="Confirmado"; nr["confidence"]=1.0
                             new_rows.append(nr)
                         st.session_state.depara_rows=new_rows
 
@@ -1650,8 +1795,8 @@ def main():
                     depara_editado[r["sigma_code"]]=r["sci_code"]
         merged_extra={**extra_map,**depara_editado}
 
-        st.markdown("###  Processamento contábil")
-        btn_proc=st.button(" Executar processamento completo",type="primary",use_container_width=True)
+        st.markdown("### Processamento Contábil")
+        btn_proc=st.button("Executar Processamento", type="primary", use_container_width=True)
 
         if btn_proc or "lancamentos" in st.session_state:
             if btn_proc:
@@ -1695,30 +1840,30 @@ def main():
                         "Valor":l.get("valor",0),"Desc":(l.get("desc") or "")[:40],
                     } for l in pend_l[:50]]),use_container_width=True,hide_index=True)
                 else:
-                    st.markdown('<div class="ok-box">[OK] Todos os lançamentos têm D e C preenchidos.</div>',
+                    st.markdown('<div class="ok-box">Todos os lançamentos têm débito e crédito preenchidos.</div>',
                                 unsafe_allow_html=True)
 
             if alertas_dedup:
-                with st.expander(f"[!] {len(alertas_dedup)} SEM PAR"):
+                with st.expander(f"Movimentos sem par — {len(alertas_dedup)} itens para revisão"):
+                    st.markdown('<div class="warn-box">Movimentos que não encontraram contrapartida no ''período. Verifique se há lançamentos incompletos no Sigma.</div>',
+                                unsafe_allow_html=True)
                     st.dataframe(pd.DataFrame([{
                         "Data":a["date"],"Conta":a["code"],
-                        "Valor":a["valor"],"Desc":(a["desc"] or "")[:50]}
+                        "Valor":a["valor"],"Descricao":(a["desc"] or "")[:50]}
                         for a in alertas_dedup[:100]]),use_container_width=True,hide_index=True)
             if alertas_regras:
-                with st.expander(f" {len(alertas_regras)} alertas sócios"):
+                with st.expander(f"Alertas de socios — {len(alertas_regras)} itens"):
                     for a in alertas_regras:
                         st.markdown(f"- **{a.get('tipo')}** | {a.get('date')} | "
                                     f"R$ {a.get('valor',0):,.2f} | {a.get('desc','')[:60]}")
-            with st.expander(" Preview (primeiros 100)"):
+            with st.expander("Preview dos lancamentos (primeiros 100)"):
                 st.dataframe(pd.DataFrame([{
                     "Data":date_br(l["data"]),"Tipo":l.get("tipo",""),
                     "D":l.get("sci_d",""),"C":l.get("sci_c",""),
                     "Valor":l["valor"],"Desc":(l.get("desc") or "")[:38],
                 } for l in lancamentos[:100]]),use_container_width=True,hide_index=True)
 
-    # 
     # TAB 4 — EXPORTAR
-    # 
     with tab4:
         if "lancamentos" not in st.session_state:
             st.info("Execute o processamento na aba 3 primeiro."); st.stop()
@@ -1728,13 +1873,13 @@ def main():
         stats       = st.session_state.get("stats_dedup",{})
         sci_plan    = st.session_state.get("sci_plan",{})
 
-        st.markdown("###  Exportar Arquivos")
+        st.markdown("### Exportar Arquivos")
         fc1,fc2=st.columns(2)
         with fc1:
-            incl_pend=st.checkbox("Incluir lançamentos com pendência D/C",value=True)
+            incl_pend=st.checkbox("Incluir lancamentos com pendencia D/C",value=True)
             nome_txt=st.text_input("Nome TXT",value=f"SCI_Importacao_Empresa29_{per}.txt")
         with fc2:
-            gerar_excel=st.checkbox("Gerar planilha Excel auditável",value=True)
+            gerar_excel=st.checkbox("Gerar planilha Excel auditavel",value=True)
             nome_xlsx=st.text_input("Nome Excel",value=f"Auditoria_Lancamentos_{per}.xlsx")
 
         if incl_pend: lancs_export=lancamentos
@@ -1747,26 +1892,26 @@ def main():
         em1,em2,em3,em4=st.columns(4)
         metric_card("Linhas TXT",   f"{len(lancs_export):,}", em1)
         metric_card("Completos",    f"{len(completos_exp):,}",em2,gold=True)
-        metric_card("Pendências",   f"{len(pend_exp):,}",     em3)
+        metric_card("Pendencias",   f"{len(pend_exp):,}",     em3)
         metric_card("Volume total", f"R$ {total_val:,.0f}",   em4,gold=True)
 
         st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
         txt_bytes=gerar_txt(lancs_export, per)
 
-        with st.expander(" Preview TXT (30 primeiras linhas)"):
+        with st.expander("Preview TXT — primeiras 30 linhas"):
             st.code("\n".join(txt_bytes.decode("cp1252",errors="replace").splitlines()[:30]),
                     language=None)
 
         dl1,dl2,dl3=st.columns(3)
         with dl1:
-            st.download_button(" Baixar TXT para SCI",data=txt_bytes,
-                               file_name=nome_txt,mime="text/plain",
-                               type="primary",use_container_width=True)
+            st.download_button("Baixar TXT para SCI", data=txt_bytes,
+                               file_name=nome_txt, mime="text/plain",
+                               type="primary", use_container_width=True)
         with dl2:
             if gerar_excel:
                 with st.spinner("Gerando Excel..."):
                     xlsx_bytes=gerar_planilha_auditoria(lancs_export,sci_plan,per)
-                st.download_button(" Baixar Excel Auditável",data=xlsx_bytes,
+                st.download_button("Baixar Excel Auditavel", data=xlsx_bytes,
                                    file_name=nome_xlsx,
                                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                    use_container_width=True)
@@ -1785,10 +1930,10 @@ def main():
                 f"Volume total       : R$ {total_val:>14,.2f}","="*50,
                 "TIPOS:",]+[f"  {t:<25}: {n:>6}"
                             for t,n in sorted(tipos.items(),key=lambda x:-x[1])])
-            st.download_button(" Relatorio .txt",
+            st.download_button("Relatorio de Processamento",
                                data=rel.encode("utf-8"),
                                file_name=f"Relatorio_{per}.txt",
-                               mime="text/plain",use_container_width=True)
+                               mime="text/plain", use_container_width=True)
         st.markdown('<div class="gold-box"><strong>Formato TXT</strong>: '
                     'Windows-1252 (ANSI) · CRLF · 10 campos · '
                     'campo 7 = complemento · data = AAAAMMDD · natureza = D fixo</div>',
@@ -1797,9 +1942,9 @@ def main():
     # Rodape
     st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
     st.markdown(
-        f'<div style="text-align:center;color:#7a7078;font-size:.75rem;">'
-        f'Domann Contabilidade &nbsp;·&nbsp; Sistema Integração Sigma→SCI v3.4 &nbsp;·&nbsp; '
-        f'Diego Domann CRC PR-070307/O-9 &nbsp;·&nbsp; '
+        f'<div style="text-align:center;color:{_DOMANN_MUTED};font-size:.75rem;">'
+        f'Domann Contabilidade &nbsp;&middot;&nbsp; Sistema Sigma SCI v3.5 &nbsp;&middot;&nbsp; '
+        f'Diego Domann CRC PR-070307/O-9 &nbsp;&middot;&nbsp; '
         f'{datetime.now().strftime("%d/%m/%Y")}</div>',
         unsafe_allow_html=True)
 
