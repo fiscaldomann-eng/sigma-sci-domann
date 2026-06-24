@@ -2027,3 +2027,7 @@ def main():
                 mime="application/json",
                 width='stretch',
             )
+
+
+if __name__ == "__main__" or True:
+    main()
