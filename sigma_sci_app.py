@@ -1428,7 +1428,7 @@ def main():
                 data=pers_bytes,
                 file_name="de_para_confirmado.json",
                 mime="application/json",
-                use_container_width=True,
+                width='stretch',
                 help="Baixe este arquivo e guarde. Na próxima sessão, importe-o para recuperar todos os mapeamentos confirmados.",
             )
 
@@ -1445,7 +1445,7 @@ def main():
             except Exception as ex:
                 st.error(f"Erro ao importar o arquivo: {ex}")
 
-        if st.button("Limpar sessão", use_container_width=True):
+        if st.button("Limpar sessão", width='stretch'):
             for k in ["accounts","sci_plan","depara_rows","lancamentos",
                       "stats_dedup","alertas_dedup","alertas_regras"]:
                 st.session_state.pop(k,None)
@@ -1488,7 +1488,7 @@ def main():
                 k,v=line.split("=",1); extra_de_para[k.strip()]=v.strip()
 
         st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
-        btn_load = st.button("Analisar Arquivos", type="primary", use_container_width=True)
+        btn_load = st.button("Analisar Arquivos", type="primary", width='stretch')
 
         if btn_load:
             if not f_mov: st.error("Carregue a Movimentação Sigma antes de continuar."); st.stop()
@@ -1540,7 +1540,7 @@ def main():
                     "Movimentos":len(d.get("movements",[])),
                     "Total R$":sum(abs(m.get("valor",0) or 0) for m in d.get("movements",[]))
                 } for k,d in sorted(accounts.items())])
-                st.dataframe(df, use_container_width=True, hide_index=True)
+                st.dataframe(df, hide_index=True)
 
     # 
     # TAB 2 — DE/PARA & MAPEAMENTOS
@@ -1632,7 +1632,7 @@ def main():
                 "Conf. %":    st.column_config.ProgressColumn("Conf.", min_value=0, max_value=100, width="small"),
                 "Método":     st.column_config.TextColumn("Método",     width="small"),
             },
-            use_container_width=True, hide_index=True)
+            width='stretch', hide_index=True)
 
         # ─── Edição inline de Código SCI e Nome SCI ─────────────────────────
         st.markdown('<div class="info-box" style="margin-top:.8rem">'
@@ -1666,12 +1666,12 @@ def main():
                 "Nome SCI":   st.column_config.TextColumn("Nome SCI",    width="large",
                                   help="Preenchido automaticamente pelo código. Você pode sobrescrever manualmente."),
             },
-            use_container_width=True, hide_index=True, num_rows="fixed",
+            width='stretch', hide_index=True, num_rows="fixed",
             key="depara_editor")
 
         cs1,cs2 = st.columns([1,3])
         with cs1:
-            btn_save = st.button("Salvar Mapeamentos", type="primary", use_container_width=True)
+            btn_save = st.button("Salvar Mapeamentos", type="primary", width='stretch')
         with cs2:
             if btn_save:
                 st.markdown('<div class="ok-box" style="margin:0">Salvo em '
@@ -1788,7 +1788,7 @@ def main():
                                                     for c,n,s,_ in cands[:5]))
                     with col_b:
                         if st.button("Confirmar", key=f"btn_alt_{r['sigma_code']}",
-                                     use_container_width=True):
+                                     width='stretch'):
                             if sel not in ("— manter atual —",""):
                                 code_sel = sel.split(" — ")[0].strip() if " — " in sel else sel.strip()
                                 if code_sel:
@@ -1849,7 +1849,7 @@ def main():
                                 key=f"pend_{r['sigma_code']}")
                         with pcb:
                             if st.button("Confirmar", key=f"btn_pend_{r['sigma_code']}",
-                                         use_container_width=True):
+                                         width='stretch'):
                                 if sel_p != "— Selecione —":
                                     code_sel=sel_p.split(" — ")[0].strip()
                                     save_persistent({r["sigma_code"]:code_sel})
@@ -1884,7 +1884,7 @@ def main():
         merged_extra={**extra_map,**depara_editado}
 
         st.markdown("### Processamento Contábil")
-        btn_proc=st.button("Executar Processamento", type="primary", use_container_width=True)
+        btn_proc=st.button("Executar Processamento", type="primary", width='stretch')
 
         if btn_proc or "lancamentos" in st.session_state:
             if btn_proc:
@@ -1919,14 +1919,14 @@ def main():
                 st.dataframe(pd.DataFrame(
                     [{"Tipo":t,"Qtd":n,"%":f"{n/max(len(lancamentos),1)*100:.1f}%"}
                      for t,n in sorted(tipos.items(),key=lambda x:-x[1])]),
-                    use_container_width=True,hide_index=True)
+                    width='stretch',hide_index=True)
             with tc2:
                 st.markdown("#### Pendências D/C")
                 if pend_l:
                     st.dataframe(pd.DataFrame([{
                         "Data":date_br(l.get("data","")),"Falta":"Débito" if not l.get("sci_d") else "Crédito",
                         "Valor":l.get("valor",0),"Desc":(l.get("desc") or "")[:40],
-                    } for l in pend_l[:50]]),use_container_width=True,hide_index=True)
+                    } for l in pend_l[:50]]),width='stretch',hide_index=True)
                 else:
                     st.markdown('<div class="ok-box">Todos os lançamentos têm débito e crédito preenchidos.</div>',
                                 unsafe_allow_html=True)
@@ -1938,7 +1938,7 @@ def main():
                     st.dataframe(pd.DataFrame([{
                         "Data":a["date"],"Conta":a["code"],
                         "Valor":a["valor"],"Descricao":(a["desc"] or "")[:50]}
-                        for a in alertas_dedup[:100]]),use_container_width=True,hide_index=True)
+                        for a in alertas_dedup[:100]]),width='stretch',hide_index=True)
             if alertas_regras:
                 with st.expander(f"Alertas de socios — {len(alertas_regras)} itens"):
                     for a in alertas_regras:
@@ -1949,7 +1949,7 @@ def main():
                     "Data":date_br(l["data"]),"Tipo":l.get("tipo",""),
                     "D":l.get("sci_d",""),"C":l.get("sci_c",""),
                     "Valor":l["valor"],"Desc":(l.get("desc") or "")[:38],
-                } for l in lancamentos[:100]]),use_container_width=True,hide_index=True)
+                } for l in lancamentos[:100]]),width='stretch',hide_index=True)
 
     # TAB 4 - EXPORTAR
     with tab4:
@@ -2005,7 +2005,7 @@ def main():
                 data=txt_content.encode("windows-1252", errors="replace"),
                 file_name=f"importacao_sci_{per.replace('/','_')}.txt",
                 mime="text/plain",
-                use_container_width=True,
+                width='stretch',
             )
 
         with st.expander("Visualizar TXT gerado"):
@@ -2025,5 +2025,5 @@ def main():
                 data=json.dumps(pers_export, ensure_ascii=False, indent=2).encode("utf-8"),
                 file_name="de_para_confirmado.json",
                 mime="application/json",
-                use_container_width=True,
+                width='stretch',
             )
