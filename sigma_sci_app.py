@@ -1,9 +1,9 @@
 """
 
-   INTEGRAÇÃO SIGMA → SCI  v3.5  — Domann Contabilidade
+   INTEGRAÇÃO SIGMA → SCI  v3.6  — Domann Contabilidade
    Auto Posto Murungava Ltda | Empresa SCI nº 29
 
-   v3.5: Badges coloridos, UI moderna sem "cara de IA"
+   v3.6: Paleta Domann exata, Código SCI + Nome SCI editáveis com auto-preenchimento
 
 """
 
@@ -18,17 +18,25 @@ import streamlit as st
 # 
 
 DOMANN_LOGO_SVG = (
-    '<svg viewBox="0 0 300 76" xmlns="http://www.w3.org/2000/svg" width="300" height="76">'
-    '<path d="M4 4 L4 48 Q4 68 34 74 Q64 68 64 48 L64 4 Z" fill="#322d33"/>'
-    '<path d="M4 4 L4 48 Q4 68 34 74 Q64 68 64 48 L64 4 Z" fill="none" stroke="#b8965a" stroke-width="2"/>'
-    '<line x1="34" y1="4" x2="34" y2="68" stroke="#b8965a" stroke-width="1.2" stroke-opacity="0.7"/>'
-    '<line x1="4" y1="36" x2="64" y2="36" stroke="#b8965a" stroke-width="1.2" stroke-opacity="0.7"/>'
-    '<text x="19" y="27" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">D</text>'
-    '<text x="49" y="27" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">O</text>'
-    '<text x="19" y="60" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">M</text>'
-    '<text x="49" y="60" font-family="Georgia,Times New Roman,serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">N</text>'
-    '<text x="78" y="36" font-family="Georgia,Times New Roman,serif" font-size="26" font-weight="bold" fill="#FFFFFF" letter-spacing="1">DOMANN</text>'
-    '<text x="80" y="54" font-family="Arial,Helvetica,sans-serif" font-size="9" fill="#b8965a" letter-spacing="3.5">CONTABILIDADE</text>'
+    '<svg viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg" width="320" height="80">'
+    # Escudo — fundo escuro
+    '<path d="M6 5 L6 50 Q6 72 36 78 Q66 72 66 50 L66 5 Z" fill="#333232"/>'
+    # Borda dourada exterior do escudo
+    '<path d="M6 5 L6 50 Q6 72 36 78 Q66 72 66 50 L66 5 Z" fill="none" stroke="#AC996F" stroke-width="2.2"/>'
+    # Borda interior (linha dupla — detalhe do logo)
+    '<path d="M10 9 L10 49 Q10 67 36 72 Q62 67 62 49 L62 9 Z" fill="none" stroke="#AC996F" stroke-width="0.8" stroke-opacity="0.55"/>'
+    # Divisória vertical central
+    '<line x1="36" y1="9" x2="36" y2="68" stroke="#AC996F" stroke-width="1" stroke-opacity="0.6"/>'
+    # Divisória horizontal central
+    '<line x1="10" y1="39" x2="62" y2="39" stroke="#AC996F" stroke-width="1" stroke-opacity="0.6"/>'
+    # Letras nos quadrantes: D O / M N
+    '<text x="23" y="30" font-family="Georgia,Times New Roman,serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle" font-style="normal">D</text>'
+    '<text x="49" y="30" font-family="Georgia,Times New Roman,serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">O</text>'
+    '<text x="23" y="62" font-family="Georgia,Times New Roman,serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">M</text>'
+    '<text x="49" y="62" font-family="Georgia,Times New Roman,serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">N</text>'
+    # Nome e subtítulo à direita
+    '<text x="80" y="38" font-family="Arial,Helvetica,sans-serif" font-size="27" font-weight="700" fill="#FFFFFF" letter-spacing="1.5">DOMANN</text>'
+    '<text x="82" y="56" font-family="Arial,Helvetica,sans-serif" font-size="9.5" fill="#AC996F" letter-spacing="4">CONTABILIDADE</text>'
     '</svg>'
 )
 
@@ -43,15 +51,16 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Paleta exata de diegodomann.com.br
-_DOMANN_DARK      = "#322d33"   # --dark (header, hero)
-_DOMANN_DEEP      = "#1e1a1f"   # --dark-deep
-_DOMANN_GOLD      = "#b8965a"   # --gold (CTAs, bordas, realces)
-_DOMANN_GOLD_L    = "#d4ae78"   # --gold-light
-_DOMANN_CREAM     = "#faf8f4"   # --cream (fundo de conteúdo)
-_DOMANN_TEXT      = "#4a4348"   # --text-body
-_DOMANN_MUTED     = "#7a7078"   # --text-muted
-_DOMANN_BORDER    = "rgba(184,150,90,0.2)"  # --border
+# Paleta oficial Domann Contabilidade (manual de marca)
+_DOMANN_DARK      = "#333232"   # Cinza escuro principal (fundo geral/header)
+_DOMANN_DEEP      = "#1e1a1f"   # Cinza profundo (gradiente)
+_DOMANN_GOLD      = "#AC996F"   # Dourado claro/champanhe (botões, realces primários)
+_DOMANN_GOLD_L    = "#c4b08a"   # Dourado claro hover
+_DOMANN_GOLD_S    = "#8B7B4C"   # Dourado fechado/bronze (subtextos, detalhes)
+_DOMANN_CREAM     = "#faf8f4"   # Creme (fundo de conteúdo)
+_DOMANN_TEXT      = "#333232"   # Texto principal (usa o cinza da marca)
+_DOMANN_MUTED     = "#7a7078"   # Texto muted
+_DOMANN_BORDER    = "rgba(172,153,111,0.22)"  # Borda sutil dourada
 
 st.markdown(f"""
 <style>
@@ -1574,29 +1583,37 @@ def main():
             },
             use_container_width=True, hide_index=True)
 
-        # ─── Edição inline de códigos SCI ────────────────────────────────────
-        st.markdown('<div class="info-box" style="margin-top:.8rem">Para corrigir o '
-                    '<strong>Código SCI</strong> de qualquer conta, edite diretamente '
-                    'a coluna abaixo e clique em <strong>Salvar</strong>.</div>',
+        # ─── Edição inline de Código SCI e Nome SCI ─────────────────────────
+        st.markdown('<div class="info-box" style="margin-top:.8rem">'
+                    'Edite o <strong>Código SCI</strong> e/ou o <strong>Nome SCI</strong> '
+                    'diretamente na tabela. Ao salvar, o nome é preenchido automaticamente '
+                    'pelo código — ou mantém o nome que você digitou se o código não for '
+                    'encontrado no plano. Clique em <strong>Salvar Mapeamentos</strong> '
+                    'para confirmar.</div>',
                     unsafe_allow_html=True)
 
-        df_edit = pd.DataFrame([{
-            "Cód. Sigma":  r["sigma_code"],
-            "Nome Sigma":  r["sigma_name"],
-            "Classe":      r["sigma_class"],
-            "Código SCI ": r["sci_code"],
-            "Nome SCI":    r["sci_name"],
-        } for r in rows_filt])
+        # Monta df guardando os valores originais para comparação no save
+        df_edit_rows = [{
+            "Cód. Sigma":      r["sigma_code"],
+            "Nome Sigma":      r["sigma_name"],
+            "Classe":          r["sigma_class"],
+            "Código SCI":      r["sci_code"] or "",
+            "Nome SCI":        r["sci_name"] or "",
+            "_orig_sci_code":  r["sci_code"] or "",
+            "_orig_sci_name":  r["sci_name"] or "",
+        } for r in rows_filt]
+        df_edit = pd.DataFrame(df_edit_rows)
 
         edited = st.data_editor(
-            df_edit,
+            df_edit.drop(columns=["_orig_sci_code","_orig_sci_name"]),
             column_config={
-                "Cód. Sigma":  st.column_config.TextColumn("Cód. Sigma", width="small",  disabled=True),
-                "Nome Sigma":  st.column_config.TextColumn("Nome Sigma", width="medium", disabled=True),
-                "Classe":      st.column_config.TextColumn("Classe",     width="small",  disabled=True),
-                "Código SCI ": st.column_config.TextColumn("Código SCI",width="small",
-                                   help="Edite o código SCI aqui — pressione Enter para confirmar"),
-                "Nome SCI":    st.column_config.TextColumn("Nome SCI (auto)", width="large", disabled=True),
+                "Cód. Sigma": st.column_config.TextColumn("Cód. Sigma",  width="small",  disabled=True),
+                "Nome Sigma": st.column_config.TextColumn("Nome Sigma",  width="medium", disabled=True),
+                "Classe":     st.column_config.TextColumn("Classe",      width="small",  disabled=True),
+                "Código SCI": st.column_config.TextColumn("Código SCI",  width="small",
+                                  help="Digite ou corrija o código SCI. O nome será auto-preenchido ao salvar."),
+                "Nome SCI":   st.column_config.TextColumn("Nome SCI",    width="large",
+                                  help="Preenchido automaticamente pelo código. Você pode sobrescrever manualmente."),
             },
             use_container_width=True, hide_index=True, num_rows="fixed",
             key="depara_editor")
@@ -1605,27 +1622,47 @@ def main():
         with cs1:
             btn_save = st.button("Salvar Mapeamentos", type="primary", use_container_width=True)
         with cs2:
-            st.markdown('<div class="ok-box" style="margin:0">Salvo em '
-                        '<code>de_para_confirmado.json</code> — '
-                        'aplicado automaticamente nos próximos períodos.</div>',
-                        unsafe_allow_html=True)
+            if btn_save:
+                st.markdown('<div class="ok-box" style="margin:0">Salvo em '
+                            '<code>de_para_confirmado.json</code> — '
+                            'aplicado automaticamente nos próximos períodos.</div>',
+                            unsafe_allow_html=True)
+
         if btn_save:
             to_save: dict[str,str] = {}
-            for _,row in edited.iterrows():
-                sg=str(row["Cód. Sigma"]).strip()
-                sc_code=str(row["Código SCI "]).strip()
-                if sg and sc_code and sc_code not in ("nan","","EXCLUIR"):
-                    to_save[sg]=sc_code
+            edit_map: dict[str,tuple[str,str]] = {}  # sigma_code → (sci_code, sci_name)
+
+            for idx, row in edited.iterrows():
+                sg        = str(row["Cód. Sigma"]).strip()
+                sc_code   = str(row["Código SCI"]).strip()
+                sc_name_u = str(row["Nome SCI"]).strip()   # nome digitado pelo usuário
+                orig_code = str(df_edit_rows[idx]["_orig_sci_code"]).strip()
+                orig_name = str(df_edit_rows[idx]["_orig_sci_name"]).strip()
+
+                if not sg or sc_code in ("nan",""):
+                    continue
+
+                # Auto-preenchimento: se código mudou → busca nome no plano
+                if sc_code != orig_code:
+                    resolved_name = sci_plan.get(sc_code, sc_name_u)
+                else:
+                    # Código igual: respeita nome digitado pelo usuário, ou mantém original
+                    resolved_name = sc_name_u if sc_name_u not in ("nan","",orig_name) else orig_name
+
+                edit_map[sg] = (sc_code, resolved_name)
+                if sc_code not in ("EXCLUIR",):
+                    to_save[sg] = sc_code
+
             save_persistent(to_save)
-            edit_map={str(row["Cód. Sigma"]):str(row["Código SCI "]).strip()
-                      for _,row in edited.iterrows()}
+
             new_rows=[]
             for r in st.session_state.depara_rows:
                 nr=dict(r)
-                ec=edit_map.get(r["sigma_code"],"")
-                if ec and ec not in ("nan",""):
-                    nr["sci_code"]=ec; nr["sci_name"]=sci_plan.get(ec,"")
-                    nr["status"]="Confirmado"; nr["confidence"]=1.0
+                if r["sigma_code"] in edit_map:
+                    ec, en = edit_map[r["sigma_code"]]
+                    if ec and ec not in ("nan",""):
+                        nr["sci_code"]=ec; nr["sci_name"]=en
+                        nr["status"]="Confirmado"; nr["confidence"]=1.0
                 new_rows.append(nr)
             st.session_state.depara_rows=new_rows
             st.success(f"{len(to_save)} mapeamentos salvos com sucesso.")
@@ -1928,26 +1965,26 @@ def main():
                 f"  Completos (D+C)  : {len(completos_exp):>8,}",
                 f"  Pendencias       : {len(pend_exp):>8,}",
                 f"Volume total       : R$ {total_val:>14,.2f}","="*50,
-                "TIPOS:",]+[f"  {t:<25}: {n:>6}"
-                            for t,n in sorted(tipos.items(),key=lambda x:-x[1])])
+                "Tipos de lancamento:"] +
+                [f"  {k:<22}: {v:>5}" for k,v in sorted(tipos.items())])
             st.download_button("Relatorio de Processamento",
                                data=rel.encode("utf-8"),
-                               file_name=f"Relatorio_{per}.txt",
+                               file_name=f"relatorio_{per.replace('/','_')}.txt",
                                mime="text/plain", use_container_width=True)
-        st.markdown('<div class="gold-box"><strong>Formato TXT</strong>: '
-                    'Windows-1252 (ANSI) · CRLF · 10 campos · '
-                    'campo 7 = complemento · data = AAAAMMDD · natureza = D fixo</div>',
-                    unsafe_allow_html=True)
 
-    # Rodape
+
+# ════════════════════════════════════════════════════════════════
+#  FOOTER
+# ════════════════════════════════════════════════════════════════
+
     st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
     st.markdown(
-        f'<div style="text-align:center;color:{_DOMANN_MUTED};font-size:.75rem;">'
-        f'Domann Contabilidade &nbsp;&middot;&nbsp; Sistema Sigma SCI v3.5 &nbsp;&middot;&nbsp; '
-        f'Diego Domann CRC PR-070307/O-9 &nbsp;&middot;&nbsp; '
-        f'{datetime.now().strftime("%d/%m/%Y")}</div>',
+        '<div style="text-align:center;font-size:.72rem;color:#7a7078;padding:.5rem 0">'
+        'Sigma SCI Integrador &nbsp;|&nbsp; <strong>v3.6</strong> &nbsp;|&nbsp; '
+        'Domann Contabilidade &nbsp;&mdash;&nbsp; Diego Domann CRC PR-070307/O-9'
+        '</div>',
         unsafe_allow_html=True)
 
 
-if __name__ == "__main__" or True:
+if __name__ == "__main__":
     main()
