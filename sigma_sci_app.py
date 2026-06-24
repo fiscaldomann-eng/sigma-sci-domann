@@ -1729,4 +1729,24 @@ def main():
                 "TIPOS:",]+[f"  {t:<25}: {n:>6}"
                             for t,n in sorted(tipos.items(),key=lambda x:-x[1])])
             st.download_button(" Relatório .txt",
-                               data=rel.encode("utf-8          
+                               data=rel.encode("utf-8"),
+                               file_name=f"Relatorio_{per}.txt",
+                               mime="text/plain",use_container_width=True)
+        st.markdown('<div class="gold-box"><strong>Formato TXT</strong>: '
+                    'Windows-1252 (ANSI) · CRLF · 10 campos · '
+                    'campo 7 = complemento · campo 8 = nº doc · '
+                    'data = AAAAMMDD · natureza = D fixo</div>',
+                    unsafe_allow_html=True)
+
+    # ── Rodapé ──────────────────────────────────────────────────────────
+    st.markdown('<hr class="gold-divider">', unsafe_allow_html=True)
+    st.markdown(
+        f'<div style="text-align:center;color:#94A3B8;font-size:.75rem;">'
+        f'Domann Contabilidade &nbsp;·&nbsp; Sistema Integração Sigma→SCI v3.3 &nbsp;·&nbsp; '
+        f'Diego Domann CRC PR-070307/O-9 &nbsp;·&nbsp; '
+        f'{datetime.now().strftime("%d/%m/%Y")}</div>',
+        unsafe_allow_html=True)
+
+
+if __name__ == "__main__" or True:
+    main()
