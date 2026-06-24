@@ -1592,7 +1592,7 @@ def main():
                 default=["Confirmado","Auto-match","Sugerido","Baixa conf.","Pendente"],
                 label_visibility="collapsed")
         with cf2:
-            busca = st.text_input("", value="", placeholder="Buscar por código ou nome...",
+            busca = st.text_input("Buscar", value="", placeholder="Buscar por código ou nome...",
                                   label_visibility="collapsed")
 
         rows_filt = [r for r in rows if not filtro_status or r["status"] in filtro_status]
